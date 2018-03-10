@@ -1,0 +1,24 @@
+{
+	"name": "bbtag",
+	"description": "A BBTag syntax highligting extension",
+	"author": "Titansmasher",
+	"license": "MIT",
+	"version": "0.0.1",
+	"publisher": "Titansmasher",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Titansmasher/VSCode-BBTag"
+	},
+	"scripts": {
+		"postinstall": "cd server && npm install && cd ../client && npm install && cd ..",
+		"compile": "tsc -p client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
+		"compile:client": "tsc -p client/tsconfig.json",
+		"watch:client": "tsc -w -p client/tsconfig.json",
+		"compile:server": "cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
+		"watch:server": "cd server && npm run installServer && cd .. && tsc -w -p server/tsconfig.json"
+	},
+	"devDependencies": {
+		"@types/node": "^6.0.101",
+		"typescript": "^2.7.2"
+	}
+}
