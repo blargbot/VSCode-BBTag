@@ -13,13 +13,39 @@
 		"vscode": "^1.16.0"
 	},
 	"categories": [
-		"Other"
+		"Languages",
+		"Snippets"
 	],
 	"activationEvents": [
-		"onLanguage:plaintext"
+		"onLanguage:bbtag"
 	],
 	"main": "./out/src/extension",
 	"contributes": {
+		"languages": [
+			{
+				"id": "bbtag",
+				"aliases": [
+					"BBTag"
+				],
+				"extensions": [
+					"bbtag"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "bbtag",
+				"path": "./snippets/bbtag.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "bbtag",
+				"scopeName": "source.bbtag",
+				"path": "./syntaxes/bbtag.tmLanguage."
+			}
+		],
 		"configuration": {
 			"type": "object",
 			"title": "BBTag Configuration",

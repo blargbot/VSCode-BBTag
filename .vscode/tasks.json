@@ -2,6 +2,30 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "debug",
+			"dependsOn": [
+				"debug:client",
+				"debug:server"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "debug:client",
+			"dependsOn": [
+				"compile",
+				"watch:client"
+			],
+			"problemMatcher": []
+		},
+		{
+			"label": "debug:server",
+			"dependsOn": [
+				"watch",
+				"watch:server"
+			],
+			"problemMatcher": []
+		},
+		{
 			"label": "compile",
 			"dependsOn": [
 				"compile:client",

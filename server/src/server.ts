@@ -6,9 +6,12 @@
 
 import {
 	IPCMessageReader, IPCMessageWriter, createConnection, IConnection, TextDocuments, TextDocument,
-	Diagnostic, DiagnosticSeverity, InitializeResult, TextDocumentPositionParams, CompletionItem,
-	CompletionItemKind
+	Diagnostic, DiagnosticSeverity, InitializeResult,
 } from 'vscode-languageserver';
+import { BBTag } from './structures/bbtag';
+import { SubTag } from './structures/subtag';
+import { AutoCompleteContext } from './autoCompletion';
+import { ServerCache } from './structures/serverCache';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport
 let connection: IConnection = createConnection(new IPCMessageReader(process), new IPCMessageWriter(process));
@@ -19,6 +22,9 @@ let documents: TextDocuments = new TextDocuments();
 // Make the text document manager listen on the connection
 // for open, change and close text document events
 documents.listen(connection);
+
+let cache: ServerCache = new ServerCache();
+let autoComplete = new AutoCompleteContext(cache);
 
 // After the server has started the client sends an initialize request. The server receives
 // in the passed params the rootPath of the workspace plus the client capabilities.
@@ -35,56 +41,84 @@ connection.onInitialize((_params): InitializeResult => {
 	}
 });
 
+
+
 // The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent((change) => {
+	updateCache(change.document);
 	validateTextDocument(change.document);
 });
 
 // The settings interface describe the server relevant settings part
-interface Settings {
+export interface Settings {
 	bbtag: BBTagSettings;
 }
 
 // These are the example settings we defined in the client's package.json
 // file
 interface BBTagSettings {
-	maxNumberOfProblems: number;
 }
 
-// hold the maxNumberOfProblems setting
-let maxNumberOfProblems: number;
 // The settings have changed. Is send on server activation
 // as well.
-connection.onDidChangeConfiguration((change) => {
-	let settings = <Settings>change.settings;
-	maxNumberOfProblems = settings.bbtag.maxNumberOfProblems || 100;
+connection.onDidChangeConfiguration(() => {
 	// Revalidate any open text documents
-	documents.all().forEach(validateTextDocument);
+	documents.all().forEach(d => {
+		updateCache(d);
+		validateTextDocument(d);
+	});
 });
+
+function updateCache(document: TextDocument): void {
+	cache.getDocument(document).bbtag = BBTag.parseDocument(document);
+}
 
 function validateTextDocument(textDocument: TextDocument): void {
 	let diagnostics: Diagnostic[] = [];
-	let lines = textDocument.getText().split(/\r?\n/g);
-	let problems = 0;
-	for (var i = 0; i < lines.length && problems < maxNumberOfProblems; i++) {
-		let line = lines[i];
-		let index = line.indexOf('typescript');
-		if (index >= 0) {
-			problems++;
-			diagnostics.push({
-				severity: DiagnosticSeverity.Warning,
-				range: {
-					start: { line: i, character: index },
-					end: { line: i, character: index + 10 }
-				},
-				message: `${line.substr(index, 10)} should be spelled TypeScript`,
-				source: 'ex'
-			});
-		}
-	}
+	applyDiagnostics(cache.getDocument(textDocument).bbtag, diagnostics);
+
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+}
+
+function applyDiagnostics(bbtag: BBTag, diagnostics: Diagnostic[]) {
+	for (const subtag of bbtag.allSubTags) {
+		diagnostics.push({
+			severity: subtag.isMalformed ? DiagnosticSeverity.Error : DiagnosticSeverity.Hint,
+			range: subtag.range,
+			message: "Located subtag " + subtag.name,
+			source: "BBTag"
+		});
+	}
+	
+	if (NaN == NaN)
+	checkBraces(bbtag, diagnostics);
+}
+
+function checkBraces(bbtag: BBTag, diagnostics: Diagnostic[]) {
+	if (bbtag.end.nextChar == '}')
+		diagnostics.push({
+			severity: DiagnosticSeverity.Error,
+			range: { start: bbtag.source.sof.position, end: bbtag.end.nextCursor.position },
+			message: 'Unpaired `}`',
+			source: 'BBTag'
+		});
+	let tags: SubTag[] = [...bbtag.subTags];
+
+	while (tags.length > 0) {
+		let nextTags = [];
+		for (const tag of tags) {
+			nextTags.push(...tag.params.reduce((p, c) => { p.push(...c.subTags); return p; }, []));
+			if (tag.range.end == null)
+				diagnostics.push({
+					severity: DiagnosticSeverity.Error,
+					range: tag.range,
+					message: "Unpaired `{`"
+				});
+		}
+		tags = nextTags;
+	}
 }
 
 connection.onDidChangeWatchedFiles((_change) => {
@@ -94,56 +128,18 @@ connection.onDidChangeWatchedFiles((_change) => {
 
 
 // This handler provides the initial list of the completion items.
-connection.onCompletion((_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
-	// The pass parameter contains the position of the text document in
-	// which code complete got requested. For the example we ignore this
-	// info and always provide the same completion items.
-	return [
-		{
-			label: 'TypeScript',
-			kind: CompletionItemKind.Text,
-			data: 1
-		},
-		{
-			label: 'JavaScript',
-			kind: CompletionItemKind.Text,
-			data: 2
-		}
-	]
-});
+connection.onCompletion(p => autoComplete.onCompletion(p));
 
 // This handler resolve additional information for the item selected in
 // the completion list.
-connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
-	if (item.data === 1) {
-		item.detail = 'TypeScript details',
-			item.documentation = 'TypeScript documentation'
-	} else if (item.data === 2) {
-		item.detail = 'JavaScript details',
-			item.documentation = 'JavaScript documentation'
-	}
-	return item;
-});
+connection.onCompletionResolve(i => autoComplete.onCompletionResolve(i));
 
-/*
-connection.onDidOpenTextDocument((params) => {
-	// A text document got opened in VSCode.
-	// params.uri uniquely identifies the document. For documents store on disk this is a file URI.
-	// params.text the initial full content of the document.
-	connection.console.log(`${params.textDocument.uri} opened.`);
-});
-connection.onDidChangeTextDocument((params) => {
-	// The content of a text document did change in VSCode.
-	// params.uri uniquely identifies the document.
-	// params.contentChanges describe the content changes to the document.
-	connection.console.log(`${params.textDocument.uri} changed: ${JSON.stringify(params.contentChanges)}`);
-});
 connection.onDidCloseTextDocument((params) => {
 	// A text document got closed in VSCode.
 	// params.uri uniquely identifies the document.
-	connection.console.log(`${params.textDocument.uri} closed.`);
+	cache.removeDocument(params.textDocument.uri);
 });
-*/
+
 
 // Listen on the connection
 connection.listen();
