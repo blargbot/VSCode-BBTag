@@ -24,7 +24,7 @@ function validate(subtag: SubTag, context: ValidationContext) {
             range: subtag.range,
             message: 'Subtag Identified: ' + subtag.definition.name
         } as ValidationResult);
-    else {
+    else if (!subtag.parentSubTags.find(t => t.name == '//')){
         let matches = SubTags.findClose(subtag.name);
         if (matches.length == 0)
             context.errors.push({

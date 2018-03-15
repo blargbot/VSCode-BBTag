@@ -83,9 +83,9 @@ export class SubTagDefinitionManager {
         let results = this._fuse.search(name) as { score: number, item: SubTagDefinition }[];
         if (results.length == 0) return [];
 
-        if (results[0].score == 0) return [results[0].item];
         console.debug(results);
-        return results.slice(0, 5).map(r => r.item);
+        if (results[0].score == 0) return [results[0].item];
+        return results.filter(r => r.score < 0.1).slice(0, 5).map(r => r.item);
 
         //name = name.toLowerCase();
         //let mapped = this.list.map(t => { return { score: t.name.similarity(name), subtag: t }; });

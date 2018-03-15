@@ -42,6 +42,8 @@ export class SubTag extends DocumentTag {
     public get name(): '*Dynamic' | string { return this.params[0].subTags.length == 0 ? this.params[0].content.toLowerCase() : '*Dynamic'; }
     public get nameRange(): IRange { return this.params[0].range; }
 
+    public get parentSubTags(): SubTag[] { return this.ancestors.filter(a => a instanceof SubTag) as SubTag[]; }
+
     private constructor(parent: BBTag, start: Cursor, end: Cursor) {
         super(parent, start, end);
     }

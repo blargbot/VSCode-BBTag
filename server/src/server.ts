@@ -29,6 +29,7 @@ export class Server {
         this.events.onInitialize.add(_ => { return { capabilities: { textDocumentSync: self.documents.syncKind } }; });
         this.events.onChangeConfig.add(p => self.config = p.settings.bbtag);
         this.events.onChangeConfig.add(_ => self.documents.all().forEach(d => self._events.onDocumentUpdate(d)));
+        this.events.onChangeConfig.add(_ => console.log('Settings updated'));
 
         this.events.onDocumentUpdate.add(doc => self._events.onCache(this.cache.getDocument(doc), doc));
         this.events.onUpdateCache.add((e, d) => e.bbtag = BBTag.parseDocument(d));
