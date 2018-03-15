@@ -38,7 +38,7 @@
 			{
 				"language": "bbtag",
 				"scopeName": "source.bbtag",
-				"path": "./syntaxes/bbtag.tmLanguage."
+				"path": "./syntaxes/bbtag.tmLanguage.json"
 			}
 		],
 		"configuration": {

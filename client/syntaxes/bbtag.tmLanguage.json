@@ -1,0 +1,16 @@
+{
+    "name": "BBTag",
+    "scopeName": "source.bbtag",
+    "patterns": [
+        {
+			"begin": "{\\s*//\\s*;",
+			"captures": {
+				"0": {
+					"name": "punctuation.definition.comment.bbtag"
+				}
+			},
+			"end": "}",
+            "name": "comment.block.bbtag"
+		}
+    ]
+}
