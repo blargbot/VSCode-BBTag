@@ -110,4 +110,4 @@ class ValidationContext {
     }
 }
 
-server.onDocumentUpdate(main);
+server.events.onDocumentUpdate.add(main);

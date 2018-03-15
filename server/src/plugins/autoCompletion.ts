@@ -19,6 +19,6 @@ function onCompletionResolve(item: CompletionItem): CompletionItem {
     return item;
 }
 
-server.onCompletion(onCompletion);
-server.onCompletionResolve(onCompletionResolve);
-server.onInitialize(_ => { return { capabilities: { completionProvider: { resolveProvider: true, triggerCharacters: ['{', ';'] } } }; })
+server.events.onCompletion.add(onCompletion);
+server.events.onCompletionResolve.add(onCompletionResolve);
+server.events.onInitialize.add(_ => { return { capabilities: { completionProvider: { resolveProvider: true, triggerCharacters: ['{', ';'] } } }; })
