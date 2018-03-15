@@ -1,16 +1,88 @@
 {
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
     "name": "BBTag",
     "scopeName": "source.bbtag",
     "patterns": [
         {
-			"begin": "{\\s*//\\s*;",
-			"captures": {
-				"0": {
-					"name": "punctuation.definition.comment.bbtag"
-				}
-			},
-			"end": "}",
-            "name": "comment.block.bbtag"
-		}
-    ]
+            "include": "#subtag"
+        }
+    ],
+    "repository": {
+        "subtag": {
+            "patterns": [
+                {
+                    "begin": "{\\s*//\\s*(;|(?=}))",
+                    "end": "}",
+                    "patterns": [
+                        {
+                            "include": "#subtag_comment"
+                        }
+                    ],
+                    "name": "comment.block.bbtag"
+                },
+                {
+                    "begin": "({)",
+                    "end": "(})",
+                    "captures": {
+                        "0": {
+                            "name": "meta.tag"
+                        },
+                        "1": {
+                            "name": "markup.other"
+                        }
+                    },
+                    "patterns": [
+                        {
+                            "include": "#argument"
+                        }
+                    ]
+                }
+            ]
+        },
+        "argument": {
+            "patterns": [
+                {
+                    "name": "keyword.bbtag",
+                    "begin": "(?<={)",
+                    "end": "(?=[;}])",
+                    "patterns": [
+                        {
+                            "include": "#subtag"
+                        }
+                    ]
+                },
+                {
+                    "name": "constant.numeric.bbtag",
+                    "match": "\\d+([\\.,]\\d+)?"
+                },
+                {
+                    "begin": "(?<=;)",
+                    "end": "(?=[;}])",
+                    "patterns": [
+                        {
+                            "include": "#subtag"
+                        }
+                    ]
+                }
+            ]
+        },
+        "subtag_comment": {
+            "begin": "({)",
+            "end": "(})",
+            "patterns": [
+                {
+                    "include": "#argument_comment"
+                }
+            ]
+        },
+        "argument_comment": {
+            "begin": "(?<=[{;])",
+            "end": "(?=[;}])",
+            "patterns": [
+                {
+                    "include": "#subtag_comment"
+                }
+            ]
+        }
+    }
 }
