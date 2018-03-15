@@ -1,12 +1,18 @@
-import { TextDocument } from "vscode-languageserver/lib/main";
-import { Position } from "./selection";
+import { TextDocument } from "vscode-languageserver";
+import { Position, IPosition } from "./selection";
 
 export class Cursor {
     public static toDebuggable(cursor: Cursor) {
         if (!cursor) return cursor;
+        let context = [
+            cursor._parent.getCursor(Math.max(cursor.index - 5, 0)),
+            cursor._parent.getCursor(Math.min(cursor.index + 5, cursor._parent.cursors.length - 1))
+        ].map(c => c.nextChar).join('|');
+
         return {
-            next: cursor.nextChar,
+            context,
             prev: cursor.prevChar,
+            next: cursor.nextChar,
             line: cursor.position.line,
             char: cursor.position.character,
             strLoc: cursor.stringLocation
@@ -17,8 +23,9 @@ export class Cursor {
     private readonly _stringIndex: number;
 
     public get position(): Position { return this._position; }
-    public get nextCursor(): Cursor { return this._parent.getCursor(this._parent.getIndex(this.position) + 1); }
-    public get prevCursor(): Cursor { return this._parent.getCursor(this._parent.getIndex(this.position) - 1); }
+    public get index(): number { return this._parent.getIndex(this._position); }
+    public get nextCursor(): Cursor { return this.offset(1); }
+    public get prevCursor(): Cursor { return this.offset(-1); }
     public get nextChar(): string { return this._parent.get(this); }
     public get prevChar(): string { return (this.prevCursor || { nextChar: '' }).nextChar; }
     public get stringLocation(): number { return this._stringIndex; }
@@ -27,6 +34,18 @@ export class Cursor {
         this._parent = parent;
         this._position = new Position(line, character);
         this._stringIndex = stringIndex;
+    }
+
+    public offset(positions: number): Cursor {
+        return this._parent.getCursor(this.index + positions);
+    }
+
+    public getOffset(offset: number) {
+        return this._parent.get(this, this.offset(offset));
+    }
+
+    public getTo(position: number | Cursor | IPosition) {
+        return this._parent.get(this, position);
     }
 }
 
@@ -79,7 +98,7 @@ export class CursorMap {
      * @param from The cursor position to start from
      * @param to The cursor position to end on. Defaults to the next cursor position
      */
-    public get(from: Position | Cursor | number, to?: Position | Cursor | number): string {
+    public get(from: IPosition | Cursor | number, to?: IPosition | Cursor | number): string {
         if (from == null) return '';
 
         let _from: Cursor, _to: Cursor;
@@ -92,24 +111,27 @@ export class CursorMap {
             _to = this.getCursor(to);
         else _to = <Cursor>to;
 
+        if (_from.position.gt(_to.position))
+            _from = [_to, _to = _from][0];
+
         return this._content.slice(_from.stringLocation, _to.stringLocation);
     }
 
-    public getIndex(position: Position): number {
+    public getIndex(position: IPosition): number {
         if (!position) return undefined;
         let line = this._positionMap[position.line];
         if (!line) return undefined;
         return line[position.character];
     }
 
-    public getCursor(position: Position | number): Cursor {
+    public getCursor(position: IPosition | number): Cursor {
         if (position == null) return undefined;
         if (typeof position == 'number')
             return this._cursors[position];
         return this.getCursor(this.getIndex(position));
     }
 
-    public isInBounds(position: Position | number) {
+    public isInBounds(position: IPosition | number) {
         if (typeof position == 'object') position = this.getIndex(position);
         return position != null &&
             position >= 0 &&
@@ -133,7 +155,7 @@ export class CursorNavigator {
         this._current = 0;
     }
 
-    public set(position: number | Position): boolean {
+    public set(position: number | IPosition): boolean {
         if (typeof position == 'object')
             position = this._content.getIndex(position);
 
