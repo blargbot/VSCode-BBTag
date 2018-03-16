@@ -80,18 +80,12 @@ export class SubTagDefinitionManager {
     }
 
     public findClose(name: string): SubTagDefinition[] {
-        let results = this._fuse.search(name) as { score: number, item: SubTagDefinition }[];
+        let results = this._fuse.search<{ score: number, item: SubTagDefinition }>(name);
         if (results.length == 0) return [];
 
         console.debug(results);
         if (results[0].score == 0) return [results[0].item];
         return results.filter(r => r.score < 0.1).slice(0, 5).map(r => r.item);
-
-        //name = name.toLowerCase();
-        //let mapped = this.list.map(t => { return { score: t.name.similarity(name), subtag: t }; });
-        //mapped = mapped.filter(m => m.score > 0.2);
-        //mapped = mapped.sort((a, b) => b.score - a.score);
-        //return mapped.slice(0, 5).map(t => t.subtag);
     }
 }
 
