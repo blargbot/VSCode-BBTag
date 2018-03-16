@@ -7,7 +7,7 @@ import {
     createConnection,
     TextDocuments
 } from 'vscode-languageserver';
-import { BBTag } from './structures/bbtag';
+import { BBTag } from '../common/structures/bbtag';
 import { ServerCache } from './structures/serverCache';
 import { BBTagConfig } from './structures/config';
 import { ServerEventManager, ServerEvents } from './structures/eventManager';

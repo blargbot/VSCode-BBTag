@@ -1,4 +1,4 @@
-import { BBTag } from './bbtag';
+import { BBTag } from '../../common/structures/bbtag';
 import { TextDocument, TextDocuments, TextDocumentIdentifier } from 'vscode-languageserver';
 
 export class ServerCache {

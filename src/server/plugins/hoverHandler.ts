@@ -1,7 +1,7 @@
 import server from '../server';
 import { TextDocumentPositionParams, Hover, MarkupKind } from 'vscode-languageserver';
-import { SubTag } from '../structures/subtag';
-import { BBTag } from '../structures/bbtag';
+import { SubTag } from '../../common/structures/subtag';
+import { BBTag } from '../../common/structures/bbtag';
 
 function main(params: TextDocumentPositionParams): Hover {
     let bbtag = server.cache.getDocument(params.textDocument).bbtag;

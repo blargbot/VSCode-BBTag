@@ -1,4 +1,4 @@
-import { LogLevel } from "../extensions";
+import { LogLevel } from "../../common/extensions";
 
 export interface BBTagConfig {
     logLevel: LogLevel

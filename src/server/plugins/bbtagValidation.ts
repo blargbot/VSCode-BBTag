@@ -1,7 +1,7 @@
-import SubTags, { DataType } from '../data/subtagDefinition'
+import SubTags, { DataType } from '../../common/data/subtagDefinition'
 import { TextDocument, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver/lib/main';
-import { SubTag } from '../structures/subtag';
-import { IRange } from '../structures/selection';
+import { SubTag } from '../../common/structures/subtag';
+import { IRange } from '../../common/structures/selection';
 import server from '../server';
 
 function main(document: TextDocument) {
