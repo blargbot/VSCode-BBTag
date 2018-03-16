@@ -17,14 +17,14 @@ function main(document: TextDocument) {
 }
 
 function validate(subtag: SubTag, context: ValidationContext) {
-    if (subtag == null) return;
+    if (subtag == null || subtag.definition != null) return;
 
-    if (subtag.definition != null)
-        context.hints.push({
+    if (subtag.name == '*Dynamic'){
+        context.warnings.push({
             range: subtag.range,
-            message: 'Subtag Identified: ' + subtag.definition.name
-        } as ValidationResult);
-    else if (!subtag.parentSubTags.find(t => t.name == '//')){
+            message: 'Dynamic subtag found. Validation cannot be performed (yet)'
+        });
+    } else if (!subtag.parentSubTags.find(t => t.name == '//')){
         let matches = SubTags.findClose(subtag.name);
         if (matches.length == 0)
             context.errors.push({
