@@ -1,5 +1,5 @@
 import { CacheEntry } from "./serverCache";
-import { TextDocument, InitializeParams, InitializeResult, DidChangeConfigurationParams, InitializeError, TextDocumentPositionParams, CompletionItem, CompletionList, ColorPresentationParams, ColorPresentation, DocumentColorParams, ColorInformation, DocumentSymbolParams, SymbolInformation } from "vscode-languageserver/lib/main";
+import { TextDocument, InitializeParams, InitializeResult, DidChangeConfigurationParams, InitializeError, TextDocumentPositionParams, CompletionItem, CompletionList, ColorPresentationParams, ColorPresentation, DocumentColorParams, ColorInformation, DocumentSymbolParams, SymbolInformation, Hover } from "vscode-languageserver";
 import { NotificationHandler, RequestHandler } from "vscode-languageserver";
 import { HandlerResult } from "vscode-jsonrpc";
 import { Server } from "../server";
@@ -40,12 +40,16 @@ export type DocumentColorEvent = RequestHandler<DocumentColorParams, ColorInform
 export type DocumentColorEventResult = HandlerResult<ColorInformation[], void>;
 export type DocumentSymbolEvent = RequestHandler<DocumentSymbolParams, SymbolInformation[], void>;
 export type DocumentSymbolEventResult = HandlerResult<SymbolInformation[], void>;
+export type HoverEvent = RequestHandler<TextDocumentPositionParams, Hover, void>;
+export type HoverEventResult = HandlerResult<Hover, void>;
+
 
 export interface ServerEvents {
     onInitialize: Event<InitializeEvent>,
     onCompletion: Event<CompletionEvent>,
     onCompletionResolve: Event<CompletionResolveEvent>,
     onColorPresentation: Event<ColorPresentationEvent>,
+    onHover: Event<HoverEvent>,
     onDocumentSymbol: Event<DocumentSymbolEvent>,
     onDocumentColor: Event<DocumentColorEvent>,
     onChangeConfig: Event<ConfigChangeEvent>,
@@ -68,6 +72,7 @@ export class ServerEventManager {
     public readonly onColorPresentation = MakeEvent<ColorPresentationEvent, ColorPresentationEventResult>(responses => [].concat(...responses));
     public readonly onDocumentColor = MakeEvent<DocumentColorEvent, DocumentColorEventResult>(responses => [].concat(...responses));
     public readonly onDocumentSymbol = MakeEvent<DocumentSymbolEvent, DocumentSymbolEventResult>(responses => [].concat(...responses));
+    public readonly onHover = MakeEvent<HoverEvent, HoverEventResult>(responses => responses.find(r => r != null));
 
     //server.documents
     public readonly onOpen = MakeEvent<DocumentEvent>(_ => { });
@@ -87,6 +92,7 @@ export class ServerEventManager {
         server.connection.onColorPresentation(this.onColorPresentation);
         server.connection.onDocumentColor(this.onDocumentColor);
         server.connection.onDocumentSymbol(this.onDocumentSymbol);
+        server.connection.onHover(this.onHover);
 
         server.documents.onDidChangeContent(d => self.onDocumentUpdate(d.document));
         server.documents.onDidClose(d => self.onClose(d.document));
@@ -98,6 +104,7 @@ export class ServerEventManager {
         onCompletion: this.onCompletion,
         onCompletionResolve: this.onCompletionResolve,
         onColorPresentation: this.onColorPresentation,
+        onHover: this.onHover,
         onDocumentSymbol: this.onDocumentSymbol,
         onDocumentColor: this.onDocumentColor,
         onChangeConfig: this.onChangeConfig,

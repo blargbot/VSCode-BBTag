@@ -98,7 +98,7 @@ export class SubTagDefinitionManager {
 export const definitions = new SubTagDefinitionManager();
 export default definitions;
 
-let dummies = [ "abs","addreact","addrole","apply","args","argsarray","argslength","ban","base","bool","brainfuck","buildembed","capitalize","ceil","channelid","channelname","channelpos","choose","color","commandname","//","concat","decrement","delete","dm","edit","embed","emoji","exec","execcc","fallback","floor","for","foreach","get","guildcreatedat","guildicon","guildid","guildmembers","guildname","guildownerid","hash","hasrole","if","increment","indexof","inject","inrole","isarray","isnsfw","join","lang","lb","length","logic","lower","match","math","max","messageid","min","modlog","newline","nsfw","pad","pardon","parsefloat","parseint","pop","prefix","push","quiet","randchoose","randint","randstr","randuser","rb","realpad","regexreplace","regextest","removerole","repeat","replace","return","reverse","rolecolor","rolecreate","roledelete","roleid","rolemembers","rolemention","rolename","roles","rolesetmentionable","round","semi","send","set","setnick","shift","shuffle","slice","sort","space","splice","split","substring","subtagexists","switch","throw","time","timer","trim","unban","upper","uriencode","useravatar","usercreatedat","userdiscrim","usergame","usergametype","userid","userjoinedat","usermention","username","usernick","userstatus","void","warn","warnings","webhook","zws" ]
+let dummies = ["abs", "addreact", "addrole", "apply", "args", "argsarray", "argslength", "ban", "base", "bool", "brainfuck", "buildembed", "capitalize", "ceil", "channelid", "channelname", "channelpos", "choose", "color", "commandname", "//", "concat", "decrement", "delete", "dm", "edit", "embed", "emoji", "exec", "execcc", "fallback", "floor", "for", "foreach", "get", "guildcreatedat", "guildicon", "guildid", "guildmembers", "guildname", "guildownerid", "hash", "hasrole", "if", "increment", "indexof", "inject", "inrole", "isarray", "isnsfw", "join", "lang", "lb", "length", "logic", "lower", "match", "math", "max", "messageid", "min", "modlog", "newline", "nsfw", "pad", "pardon", "parsefloat", "parseint", "pop", "prefix", "push", "quiet", "randchoose", "randint", "randstr", "randuser", "rb", "realpad", "regexreplace", "regextest", "removerole", "repeat", "replace", "return", "reverse", "rolecolor", "rolecreate", "roledelete", "roleid", "rolemembers", "rolemention", "rolename", "roles", "rolesetmentionable", "round", "semi", "send", "set", "setnick", "shift", "shuffle", "slice", "sort", "space", "splice", "split", "substring", "subtagexists", "switch", "throw", "time", "timer", "trim", "unban", "upper", "uriencode", "useravatar", "usercreatedat", "userdiscrim", "usergame", "usergametype", "userid", "userjoinedat", "usermention", "username", "usernick", "userstatus", "void", "warn", "warnings", "webhook", "zws"]
 
 let subtags = extensions.requireFolder('./data/subtags');
 for (const key of Object.keys(subtags)) {
@@ -113,6 +113,7 @@ for (const key of Object.keys(subtags)) {
 for (const dummy of dummies) {
     definitions.list.push({
         name: dummy,
+        category: 'dummy' as any,
         title: "A dummy tag",
         description: "A dummy tag, loaded automatically",
         parameters: [],

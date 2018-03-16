@@ -1,5 +1,5 @@
 import { BBTag } from './bbtag';
-import { TextDocument, TextDocuments } from 'vscode-languageserver';
+import { TextDocument, TextDocuments, TextDocumentIdentifier } from 'vscode-languageserver';
 
 export class ServerCache {
     private readonly _entries: { [key: string]: CacheEntry } = {};
@@ -9,7 +9,7 @@ export class ServerCache {
         this._documents = documents;
     }
 
-    public getDocument(document: TextDocument | string): CacheEntry {
+    public getDocument(document: TextDocument | TextDocumentIdentifier | string): CacheEntry {
         if (typeof document != 'string') document = document.uri;
         return this._entries[document] || (this._entries[document] = new CacheEntry(document, this._documents));
     }
