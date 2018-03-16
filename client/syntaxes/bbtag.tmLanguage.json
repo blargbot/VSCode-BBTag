@@ -11,27 +11,31 @@
         "subtag": {
             "patterns": [
                 {
+                    "name": "comment.block.bbtag",
                     "begin": "{\\s*//\\s*(;|(?=}))",
                     "end": "}",
                     "patterns": [
                         {
                             "include": "#subtag_comment"
                         }
-                    ],
-                    "name": "comment.block.bbtag"
+                    ]
                 },
                 {
                     "begin": "({)",
                     "end": "(})",
                     "captures": {
                         "0": {
-                            "name": "meta.tag"
+                            "name": "entity.name.class.bbtag"
                         },
                         "1": {
-                            "name": "markup.other"
+                            "name": "entity.name.class.bbtag"
                         }
                     },
                     "patterns": [
+                        {
+                            "name": "entity.name.class.bbtag",
+                            "match": ";"
+                        },
                         {
                             "include": "#argument"
                         }
@@ -42,7 +46,7 @@
         "argument": {
             "patterns": [
                 {
-                    "name": "keyword.bbtag",
+                    "name": "keyword.control.bbtag",
                     "begin": "(?<={)",
                     "end": "(?=[;}])",
                     "patterns": [
@@ -53,7 +57,7 @@
                 },
                 {
                     "name": "constant.numeric.bbtag",
-                    "match": "\\d+([\\.,]\\d+)?"
+                    "match": "(?<=[{;])\\s*\\d+([\\.,]\\d+)?\\s*(?=[};])"
                 },
                 {
                     "begin": "(?<=;)",

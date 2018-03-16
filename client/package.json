@@ -33,14 +33,13 @@
 				"configuration": "./language-configuration.json"
 			}
 		],
-		"snippets": [],
 		"grammars": [
 			{
 				"language": "bbtag",
 				"scopeName": "source.bbtag",
 				"path": "./syntaxes/bbtag.tmLanguage.json"
 			}
-		],
+        ],
 		"configuration": {
 			"type": "object",
 			"title": "BBTag Configuration",
