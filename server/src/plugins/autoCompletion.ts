@@ -7,7 +7,7 @@ function onCompletion(_docPos: TextDocumentPositionParams): CompletionItem[] {
         return <CompletionItem>{
             label: d.name,
             filterText: '{' + d.name,
-            insertText: '{' + [d.name].concat(d.parameters.map((p, j) => 'name' in p ? '${' + j + ':' + p.name + '}' : '')).join(';') + '}',
+            insertText: [d.name].concat(d.parameters.map((p, j) => 'name' in p ? '${' + j + ':' + p.name + '}' : '')).join(';'),
             insertTextFormat: InsertTextFormat.Snippet,
             kind: CompletionItemKind.Snippet,
             data: { id: i }
