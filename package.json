@@ -69,7 +69,7 @@
 		"compile": "tsc -p ./tsconfig.json",
 		"compile:client": "tsc -p ./tsconfig.json",
 		"watch:client": "tsc -w -p ./tsconfig.json",
-		"compile:server": "&& tsc -p ./tsconfig.json",
+		"compile:server": "tsc -p ./tsconfig.json",
 		"watch:server": "tsc -w -p ./tsconfig.json",
 		"update-vscode": "node ./node_modules/vscode/bin/install",
 		"postinstall": "node ./node_modules/vscode/bin/install"
