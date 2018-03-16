@@ -21,19 +21,20 @@
                     ]
                 },
                 {
+                    "name": "entity.name.class.bbtag",
                     "begin": "({)",
                     "end": "(})",
                     "captures": {
                         "0": {
-                            "name": "entity.name.class.bbtag"
+                            "name": "punctuation.definition.subtag.bbtag"
                         },
                         "1": {
-                            "name": "entity.name.class.bbtag"
+                            "name": "punctuation.definition.subtag.bbtag"
                         }
                     },
                     "patterns": [
                         {
-                            "name": "entity.name.class.bbtag",
+                            "name": "punctuation.definition.subtag.separator.bbtag",
                             "match": ";"
                         },
                         {
@@ -60,6 +61,7 @@
                     "match": "(?<=[{;])\\s*\\d+([\\.,]\\d+)?\\s*(?=[};])"
                 },
                 {
+                    "name": "variable.parameter.text.bbtag",
                     "begin": "(?<=;)",
                     "end": "(?=[;}])",
                     "patterns": [
