@@ -8,9 +8,10 @@
 		"target": "es6",
 		"module": "commonjs",
 		"moduleResolution": "node",
-		"sourceMap": true,
+        "sourceMap": true,
+        "sourceRoot": "../src",
 		"lib" : [ "es2016" ],
-		"outDir": "../client/server"
+		"outDir": "../out/server"
 	},
 	"exclude": [
 		"node_modules"

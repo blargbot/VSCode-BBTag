@@ -9,63 +9,7 @@
 		"type": "git",
 		"url": "https://github.com/Titansmasher/VSCode-BBTag"
 	},
-	"engines": {
-		"vscode": "^1.16.0"
-	},
-	"categories": [
-		"Languages",
-		"Snippets"
-	],
-	"activationEvents": [
-		"onLanguage:bbtag"
-	],
-	"main": "./out/src/extension",
-	"contributes": {
-		"languages": [
-			{
-				"id": "bbtag",
-				"aliases": [
-					"BBTag"
-				],
-				"extensions": [
-					"bbtag"
-				],
-				"configuration": "./language-configuration.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "bbtag",
-				"scopeName": "source.bbtag",
-				"path": "./syntaxes/bbtag.tmLanguage.json"
-			}
-        ],
-		"configuration": {
-			"type": "object",
-			"title": "BBTag Configuration",
-			"properties": {
-				"bbtag.logLevel": {
-					"scope": "resource",
-					"type": "number",
-					"default": 3,
-					"description": "Specifies the logging level. 0 = critical, 5 = debug"
-				},
-				"bbtag.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "off",
-					"description": "Traces the communication between VSCode and the language server."
-				}
-			}
-		}
-	},
 	"scripts": {
-		"vscode:prepublish": "tsc -p ./",
 		"compile": "tsc -p ./",
 		"watch": "tsc -w -p ./",
 		"update-vscode": "node ./node_modules/vscode/bin/install",

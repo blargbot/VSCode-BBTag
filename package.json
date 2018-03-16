@@ -9,16 +9,79 @@
 		"type": "git",
 		"url": "https://github.com/Titansmasher/VSCode-BBTag"
 	},
+	"engines": {
+		"vscode": "^1.16.0",
+		"node": "*"
+	},
+	"categories": [
+		"Languages",
+		"Snippets"
+	],
+	"activationEvents": [
+		"onLanguage:bbtag"
+	],
+	"main": "./out/client/extension",
+	"contributes": {
+		"languages": [
+			{
+				"id": "bbtag",
+				"aliases": [
+					"BBTag"
+				],
+				"extensions": [
+					"bbtag"
+				],
+				"configuration": "./languages/bbtag.language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "bbtag",
+				"scopeName": "source.bbtag",
+				"path": "./syntaxes/bbtag.tmLanguage.json"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "BBTag Configuration",
+			"properties": {
+				"bbtag.logLevel": {
+					"scope": "resource",
+					"type": "number",
+					"default": 3,
+					"description": "Specifies the logging level. 0 = critical, 5 = debug"
+				},
+				"bbtag.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Traces the communication between VSCode and the language server."
+				}
+			}
+		}
+	},
 	"scripts": {
-		"postinstall": "cd server && npm install && cd ../client && npm install && cd ..",
-		"compile": "tsc -p client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
-		"compile:client": "tsc -p client/tsconfig.json",
-		"watch:client": "tsc -w -p client/tsconfig.json",
-		"compile:server": "cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
-		"watch:server": "cd server && npm run installServer && cd .. && tsc -w -p server/tsconfig.json"
+		"compile": "tsc -p ./client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p ./server/tsconfig.json",
+		"compile:client": "tsc -p ./client/tsconfig.json",
+		"watch:client": "tsc -w -p ./client/tsconfig.json",
+		"compile:server": "cd server && npm run installServer && cd .. && tsc -p ./server/tsconfig.json",
+		"watch:server": "cd server && npm run installServer && cd .. && tsc -w -p ./server/tsconfig.json",
+		"update-vscode": "node ./node_modules/vscode/bin/install",
+		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
 	"devDependencies": {
 		"@types/node": "^6.0.101",
 		"typescript": "^2.7.2"
+	},
+	"dependencies": {
+		"vscode-languageclient": "^4.0.0",
+		"vscode-languageserver": "^4.0.0",
+		"vscode": "^1.1.13",
+		"fuse.js": "^3.2.0"
 	}
 }

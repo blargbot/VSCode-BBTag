@@ -3,12 +3,12 @@
 import * as path from 'path';
 
 import { workspace, ExtensionContext } from 'vscode';
-import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
+import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/lib/main';
 
 export function activate(context: ExtensionContext) {
 
     // The server is implemented in node
-    let serverModule = context.asAbsolutePath(path.join('server', 'server.js'));
+    let serverModule = context.asAbsolutePath(path.join('out/server', 'server.js'));
     // The debug options for the server
     let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
     

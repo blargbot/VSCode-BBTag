@@ -8,12 +8,12 @@
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceRoot}/client"
+				"--extensionDevelopmentPath=${workspaceRoot}"
 			],
 			"stopOnEntry": false,
 			"sourceMaps": true,
 			"outFiles": [
-				"${workspaceRoot}/client/out/**/*.js"
+				"${workspaceRoot}/out/client/**/*.js"
 			],
 			"preLaunchTask": "watch:client"
 		},
@@ -24,7 +24,7 @@
 			"port": 6009,
 			"sourceMaps": true,
 			"outFiles": [
-				"${workspaceRoot}/client/server/**/*.js"
+				"${workspaceRoot}/out/server/**/*.js"
 			],
 			"preLaunchTask": "watch:server"
 		}

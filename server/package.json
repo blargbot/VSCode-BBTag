@@ -19,8 +19,8 @@
 		"fuse.js": "^3.2.0"
 	},
 	"scripts": {
-		"installServer": "installServerIntoExtension ../client ./package.json ./tsconfig.json",
-		"compile": "installServerIntoExtension ../client ./package.json ./tsconfig.json && tsc -p .",
-		"watch": "installServerIntoExtension ../client ./package.json ./tsconfig.json && tsc -w -p ."
+		"installServer": "installServerIntoExtension ../out ./package.json ./tsconfig.json",
+		"compile": "installServerIntoExtension ../out ./package.json ./tsconfig.json && tsc -p .",
+		"watch": "installServerIntoExtension ../out ./package.json ./tsconfig.json && tsc -w -p ."
 	}
 }
