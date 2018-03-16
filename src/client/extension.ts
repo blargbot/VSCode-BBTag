@@ -1,14 +1,12 @@
-'use strict';
+import * as path from "path";
 
-import * as path from 'path';
-
-import { workspace, ExtensionContext } from 'vscode';
-import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient/lib/main';
+import { workspace, ExtensionContext } from "vscode";
+import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from "vscode-languageclient/lib/main";
 
 export function activate(context: ExtensionContext) {
 
     // The server is implemented in node
-    let serverModule = context.asAbsolutePath(path.join('out/server', 'server.js'));
+    let serverModule = context.asAbsolutePath(path.join("out/server", "server.js"));
     // The debug options for the server
     let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
     
@@ -22,19 +20,19 @@ export function activate(context: ExtensionContext) {
     // Options to control the language client
     let clientOptions: LanguageClientOptions = {
         // Register the server for plain text documents
-        documentSelector: [{scheme: 'file', language: 'bbtag'}],
+        documentSelector: [{scheme: "file", language: "bbtag"}],
         synchronize: {
-            // Synchronize the setting section 'languageServerExample' to the server
-            configurationSection: 'bbtag',
-            // Notify the server about file changes to '.clientrc files contain in the workspace
-            fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
+            // Synchronize the setting section "languageServerExample" to the server
+            configurationSection: "bbtag",
+            // Notify the server about file changes to ".clientrc files contain in the workspace
+            fileEvents: workspace.createFileSystemWatcher("**/.clientrc")
         }
     }
     
     // Create the language client and start the client.
-    let disposable = new LanguageClient('BBTag', 'BBTag Language Client', serverOptions, clientOptions).start();
+    let disposable = new LanguageClient("BBTag", "BBTag Language Client", serverOptions, clientOptions).start();
     
-    // Push the disposable to the context's subscriptions so that the 
+    // Push the disposable to the context"s subscriptions so that the 
     // client can be deactivated on extension deactivation
     context.subscriptions.push(disposable);
 }

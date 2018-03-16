@@ -1,8 +1,8 @@
-import SubTags, { DataType } from '../../common/data/subtagDefinition'
-import { TextDocument, DiagnosticSeverity, Diagnostic } from 'vscode-languageserver/lib/main';
-import { SubTag } from '../../common/structures/subtag';
-import { IRange } from '../../common/structures/selection';
-import server from '../server';
+import SubTags, { DataType } from "../../common/data/subtagDefinition"
+import { TextDocument, DiagnosticSeverity, Diagnostic } from "vscode-languageserver/lib/main";
+import { SubTag } from "../../common/structures/subtag";
+import { IRange } from "../../common/structures/selection";
+import server from "../server";
 
 function main(document: TextDocument) {
     let bbtag = server.cache.getDocument(document).bbtag;
@@ -19,47 +19,47 @@ function main(document: TextDocument) {
 function validate(subtag: SubTag, context: ValidationContext) {
     if (subtag == null || subtag.definition != null) return;
 
-    if (subtag.name == '*Dynamic'){
+    if (subtag.name == "*Dynamic"){
         context.warnings.push({
             range: subtag.range,
-            message: 'Dynamic subtag found. Validation cannot be performed (yet)'
+            message: "Dynamic subtag found. Validation cannot be performed (yet)"
         });
-    } else if (!subtag.parentSubTags.find(t => t.name == '//')){
+    } else if (!subtag.parentSubTags.find(t => t.name == "//")){
         let matches = SubTags.findClose(subtag.name);
         if (matches.length == 0)
             context.errors.push({
                 range: subtag.range,
-                message: 'Unknown SubTag: `' + subtag.name + '`'
+                message: "Unknown SubTag: `" + subtag.name + "`"
             });
         else
             context.errors.push({
                 range: subtag.range,
-                message: 'Unknown SubTag: `' + subtag.name + '`. Did you mean one of the following?: ' + matches.map(m => '`' + m.name + '`').join(', ')
+                message: "Unknown SubTag: `" + subtag.name + "`. Did you mean one of the following?: " + matches.map(m => "`" + m.name + "`").join(", ")
             });
     }
 }
 
 function parseMeta(subtag: SubTag, context: ValidationContext) {
     if (subtag == null) return;
-    if (subtag.name != '//') return;
-    if (subtag.params[1].content != '<META>') return;
+    if (subtag.name != "//") return;
+    if (subtag.params[1].content != "<META>") return;
 
     for (const param of subtag.params.slice(2)) {
-        let [key, value] = param.content.split(':');
+        let [key, value] = param.content.split(":");
         switch (key) {
-            case 'variables':
-            case 'variable':
-            case 'vars':
-            case 'var':
+            case "variables":
+            case "variable":
+            case "vars":
+            case "var":
                 let json = JSON.parseSafe<string[]>(value);
                 if (json.success &&
                     Array.isArray(json.result) &&
-                    json.result.reduce((p, r) => p && typeof r == 'string', true))
+                    json.result.reduce((p, r) => p && typeof r == "string", true))
                     context.meta.variables.push(...json.result.map(r => {
                         return {
                             name: r,
                             nameRange: param.range,
-                            type: 'text',
+                            type: "text",
                             range: param.range
                         } as VariableDef
                     }));

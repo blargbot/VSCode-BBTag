@@ -47,7 +47,7 @@ export abstract class DocumentTag {
     protected removeChild(...children: (DocumentTag | number)[]) {
         let numbers: number[] = [];
         for (const child of children)
-            if (typeof child == 'number')
+            if (typeof child == "number")
                 numbers.push(child);
             else
                 numbers.push(this._children.indexOf(child));
@@ -72,7 +72,7 @@ export abstract class DocumentTag {
     }
 
     public locate(position: IPosition): DocumentTag {
-        if (this.range.getIntersection(position) != 'contains') return null;
+        if (this.range.getIntersection(position) != "contains") return null;
         for (const child of this.children){
             let located = child.locate(position);
             if (located != null) 

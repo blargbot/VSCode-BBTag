@@ -1,10 +1,10 @@
-import * as extensions from '../extensions';
+import * as extensions from "../extensions";
 import { SubTag } from "../structures/subtag";
 import { BBTag } from "../structures/bbtag";
 import { IRange } from "../structures/selection";
 import * as Fuse from "fuse.js";
 
-export type DataType = 'nothing' | 'text' | 'number' | 'boolean' | 'array' | 'color' | 'user' | 'channel' | 'role' | 'guild' | number;
+export type DataType = "nothing" | "text" | "number" | "boolean" | "array" | "color" | "user" | "channel" | "role" | "guild" | number;
 export interface ValidationResult {
     range: IRange;
     message: string;
@@ -17,7 +17,7 @@ export interface SubTagDefinition {
     /** A brief description of the SubTag. */
     readonly title: string;
     /** The category of the SubTag. */
-    readonly category?: 'Simple' | 'Complex' | 'Array' | 'CCommand';
+    readonly category?: "Simple" | "Complex" | "Array" | "CCommand";
     /** A detailed description of the SubTag. */
     readonly description: string;
     /** The type(s) that the SubTag returns. */
@@ -57,7 +57,7 @@ export interface Parameter {
     /** Can the parameter accept multiple values. If `true`, any excess values provided will be taken by this parameter. */
     readonly extended?: boolean;
     /** Specifies the level of support for arrays. */
-    readonly array?: 'ignored' | 'optional' | 'required';
+    readonly array?: "ignored" | "optional" | "required";
 
     /** An optional method to validate this parameter. */
     readonly validate?: (bbtag: BBTag) => true | ValidationResult | ValidationResult[];
@@ -71,7 +71,7 @@ export class SubTagDefinitionManager {
         caseSensitive: false,
         includeScore: true,
         shouldSort: true,
-        keys: ['name']
+        keys: ["name"]
     });
 
     public findExact(name: string): SubTagDefinition {
@@ -100,7 +100,7 @@ export default definitions;
 
 let dummies = ["abs", "addreact", "addrole", "apply", "args", "argsarray", "argslength", "ban", "base", "bool", "brainfuck", "buildembed", "capitalize", "ceil", "channelid", "channelname", "channelpos", "choose", "color", "commandname", "//", "concat", "decrement", "delete", "dm", "edit", "embed", "emoji", "exec", "execcc", "fallback", "floor", "for", "foreach", "get", "guildcreatedat", "guildicon", "guildid", "guildmembers", "guildname", "guildownerid", "hash", "hasrole", "if", "increment", "indexof", "inject", "inrole", "isarray", "isnsfw", "join", "lang", "lb", "length", "logic", "lower", "match", "math", "max", "messageid", "min", "modlog", "newline", "nsfw", "pad", "pardon", "parsefloat", "parseint", "pop", "prefix", "push", "quiet", "randchoose", "randint", "randstr", "randuser", "rb", "realpad", "regexreplace", "regextest", "removerole", "repeat", "replace", "return", "reverse", "rolecolor", "rolecreate", "roledelete", "roleid", "rolemembers", "rolemention", "rolename", "roles", "rolesetmentionable", "round", "semi", "send", "set", "setnick", "shift", "shuffle", "slice", "sort", "space", "splice", "split", "substring", "subtagexists", "switch", "throw", "time", "timer", "trim", "unban", "upper", "uriencode", "useravatar", "usercreatedat", "userdiscrim", "usergame", "usergametype", "userid", "userjoinedat", "usermention", "username", "usernick", "userstatus", "void", "warn", "warnings", "webhook", "zws"]
 
-let subtags = extensions.requireFolder('./data/subtags');
+let subtags = extensions.requireFolder("./data/subtags");
 for (const key of Object.keys(subtags)) {
     let subtag = subtags[key];
     let index = dummies.indexOf(subtag.name);
@@ -113,7 +113,7 @@ for (const key of Object.keys(subtags)) {
 for (const dummy of dummies) {
     definitions.list.push({
         name: dummy,
-        category: 'dummy' as any,
+        category: "dummy" as any,
         title: "A dummy tag",
         description: "A dummy tag, loaded automatically",
         parameters: [],

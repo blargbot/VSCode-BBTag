@@ -1,7 +1,7 @@
-import { BBTag } from '../../common/structures/bbtag';
-import { TextDocument, TextDocuments, TextDocumentIdentifier } from 'vscode-languageserver';
+import { BBTag } from "../../common/structures/bbtag";
+import { TextDocument, TextDocuments, TextDocumentIdentifier } from "vscode-languageserver";
 
-export class ServerCache {
+export class Cache {
     private readonly _entries: { [key: string]: CacheEntry } = {};
     private readonly _documents: TextDocuments;
 
@@ -10,12 +10,12 @@ export class ServerCache {
     }
 
     public getDocument(document: TextDocument | TextDocumentIdentifier | string): CacheEntry {
-        if (typeof document != 'string') document = document.uri;
+        if (typeof document != "string") document = document.uri;
         return this._entries[document] || (this._entries[document] = new CacheEntry(document, this._documents));
     }
 
     public removeDocument(document: TextDocument | string): void {
-        if (typeof document != 'string') document = document.uri;
+        if (typeof document != "string") document = document.uri;
         delete this._entries[document];
     }
 
@@ -34,8 +34,8 @@ export class CacheEntry {
         this._textDocuments = textDocuments;
     }
 
-    public get bbtag(): BBTag { return this.get<BBTag>('bbtag'); }
-    public set bbtag(value: BBTag) { this.set('bbtag', value); }
+    public get bbtag(): BBTag { return this.get<BBTag>("bbtag"); }
+    public set bbtag(value: BBTag) { this.set("bbtag", value); }
     public get document(): TextDocument { return this._textDocuments.get(this.uri); }
 
     public get<T>(key: string): T {

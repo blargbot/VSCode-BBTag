@@ -1,4 +1,4 @@
-import { CacheEntry } from "./serverCache";
+import { CacheEntry } from "./cache";
 import { TextDocument, InitializeParams, InitializeResult, DidChangeConfigurationParams, InitializeError, TextDocumentPositionParams, CompletionItem, CompletionList, DocumentSymbolParams, SymbolInformation, Hover } from "vscode-languageserver";
 import { NotificationHandler, RequestHandler } from "vscode-languageserver";
 import { HandlerResult } from "vscode-jsonrpc";
@@ -62,7 +62,7 @@ export interface ServerEvents {
 export class ServerEventManager {
     public readonly onInitialize = MakeEvent<InitializeEvent, InitializeEventResult>(results => {
         return {
-            capabilities: Object.assign({}, ...results.map(p => 'capabilities' in p ? p.capabilities : null))
+            capabilities: Object.assign({}, ...results.map(p => "capabilities" in p ? p.capabilities : null))
         } as InitializeResult;
     })
     //server.connection

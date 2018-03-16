@@ -7,7 +7,7 @@ export class Cursor {
         let context = [
             cursor._parent.getCursor(Math.max(cursor.index - 5, 0)),
             cursor._parent.getCursor(Math.min(cursor.index + 5, cursor._parent.cursors.length - 1))
-        ].map(c => c.nextChar).join('|');
+        ].map(c => c.nextChar).join("|");
 
         return {
             context,
@@ -27,7 +27,7 @@ export class Cursor {
     public get nextCursor(): Cursor { return this.offset(1); }
     public get prevCursor(): Cursor { return this.offset(-1); }
     public get nextChar(): string { return this._parent.get(this); }
-    public get prevChar(): string { return (this.prevCursor || { nextChar: '' }).nextChar; }
+    public get prevChar(): string { return (this.prevCursor || { nextChar: "" }).nextChar; }
     public get stringLocation(): number { return this._stringIndex; }
 
     constructor(parent: CursorMap, line: number, character: number, stringIndex: number) {
@@ -72,7 +72,7 @@ export class CursorMap {
 
     private constructor(content: string) {
         this._content = content;
-        let lines = content.split('\n');
+        let lines = content.split("\n");
         /* This will build up a map like this (| = a cursor position)
             |t|h|i|s| |i|s| |a| |t|e|s|t|
             |h|m|m|m|m|
@@ -99,7 +99,7 @@ export class CursorMap {
      * @param to The cursor position to end on. Defaults to the next cursor position
      */
     public get(from: IPosition | Cursor | number, to?: IPosition | Cursor | number): string {
-        if (from == null) return '';
+        if (from == null) return "";
 
         let _from: Cursor, _to: Cursor;
         if (!(from instanceof Cursor))
@@ -126,13 +126,13 @@ export class CursorMap {
 
     public getCursor(position: IPosition | number): Cursor {
         if (position == null) return undefined;
-        if (typeof position == 'number')
+        if (typeof position == "number")
             return this._cursors[position];
         return this.getCursor(this.getIndex(position));
     }
 
     public isInBounds(position: IPosition | number) {
-        if (typeof position == 'object') position = this.getIndex(position);
+        if (typeof position == "object") position = this.getIndex(position);
         return position != null &&
             position >= 0 &&
             position < this._cursors.length;
@@ -156,7 +156,7 @@ export class CursorNavigator {
     }
 
     public set(position: number | IPosition): boolean {
-        if (typeof position == 'object')
+        if (typeof position == "object")
             position = this._content.getIndex(position);
 
         if (this._content.get(position) == null)

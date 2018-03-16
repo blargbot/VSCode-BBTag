@@ -1,36 +1,36 @@
-import { Range as IRange, Position as IPosition } from 'vscode-languageserver'
+import { Range as IRange, Position as IPosition } from "vscode-languageserver"
 
-type Intersection = 'none' | 'below' | 'above' | 'lower' | 'upper' | 'full' | 'contains';
+type Intersection = "none" | "below" | "above" | "lower" | "upper" | "full" | "contains";
 
 export class Range implements IRange {
     public static parse(range: IRange | IPosition): Range {
         if (range == null) return null;
         if (range instanceof Range) return range;
-        if ('line' in range && 'character' in range) return Range.parse({ start: range, end: range });
+        if ("line" in range && "character" in range) return Range.parse({ start: range, end: range });
         return new Range(Position.parse(range.start), Position.parse(range.end));
     }
 
     /**
      * Returns a value based on the kind of intersection
      * 
-     * 'none' = One or both of the values were null
+     * "none" = One or both of the values were null
      * 
-     * 'below' = @param target was fully below @param range
+     * "below" = @param target was fully below @param range
      * 
-     * 'above' = @param target was fully above @param range
+     * "above" = @param target was fully above @param range
      * 
-     * 'lower' = @param target overlaps with the bottom of @param range
+     * "lower" = @param target overlaps with the bottom of @param range
      * 
-     * 'upper' = @param target overlaps with the top of @param range
+     * "upper" = @param target overlaps with the top of @param range
      * 
-     * 'full' = @param target overlaps both the top and bottom of @param range
+     * "full" = @param target overlaps both the top and bottom of @param range
      * 
-     * 'contains' = @param target is contained within @param range
+     * "contains" = @param target is contained within @param range
      * @param range The base range to use
      * @param target The range we are expecting to intersect with
      */
     public static getIntersection(range: IRange, target: IRange | IPosition): Intersection {
-        if (range == null || target == null) return 'none';
+        if (range == null || target == null) return "none";
 
         target = Range.parse(target);
         let rStart = Position.parse(range.start),
@@ -38,25 +38,25 @@ export class Range implements IRange {
             tStart = Position.parse(target.start),
             tEnd = Position.parse(target.end);
 
-        if (rStart == null || rEnd == null || tStart == null || tEnd == null) return 'none';
+        if (rStart == null || rEnd == null || tStart == null || tEnd == null) return "none";
 
         if (tStart.lt(rStart)) {
             if (tEnd.le(rStart))
-                return 'below';
+                return "below";
             if (tEnd.lt(rEnd))
-                return 'lower';
-            return 'full';
+                return "lower";
+            return "full";
         }
 
         if (tEnd.gt(rEnd)) {
             if (tStart.ge(rEnd))
-                return 'above';
+                return "above";
             if (tEnd.gt(rStart))
-                return 'upper';
-            return 'full';
+                return "upper";
+            return "full";
         }
 
-        return 'contains';
+        return "contains";
     }
 
     public readonly start: Position;

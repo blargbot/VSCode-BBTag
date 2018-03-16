@@ -1,7 +1,7 @@
-import server from '../server';
-import { TextDocumentPositionParams, Hover, MarkupKind } from 'vscode-languageserver';
-import { SubTag } from '../../common/structures/subtag';
-import { BBTag } from '../../common/structures/bbtag';
+import server from "../server";
+import { TextDocumentPositionParams, Hover, MarkupKind } from "vscode-languageserver";
+import { SubTag } from "../../common/structures/subtag";
+import { BBTag } from "../../common/structures/bbtag";
 
 function main(params: TextDocumentPositionParams): Hover {
     let bbtag = server.cache.getDocument(params.textDocument).bbtag;
@@ -16,10 +16,10 @@ function main(params: TextDocumentPositionParams): Hover {
             contents: {
                 kind: MarkupKind.Markdown,
                 value: curTag.definition != null
-                    ? curTag.definition.category + ' SubTag `' + curTag.definition.name + '`'
-                    : curTag.name == '*Dynamic'
-                        ? 'Dynamic SubTag ```bbtag' + curTag.params[0].content + '``` (Not fully implemented)'
-                        : 'Unknown SubTag `' + curTag.name + '`'
+                    ? curTag.definition.category + " SubTag `" + curTag.definition.name + "`"
+                    : curTag.name == "*Dynamic"
+                        ? "Dynamic SubTag ```bbtag" + curTag.params[0].content + "``` (Not fully implemented)"
+                        : "Unknown SubTag `" + curTag.name + "`"
             }
         };
     return null;

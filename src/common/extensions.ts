@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import * as path from 'path';
+import * as path from "path";
 
 declare global {
     interface Console {
@@ -28,7 +28,7 @@ export function requireFolder(folder: string, mapper?: (file: string) => string)
     let files = fs.readdirSync(path.join(__dirname, folder));
     if (files == null) return undefined;
 
-    mapper = mapper || (f => f.split('.')[0]);
+    mapper = mapper || (f => f.split(".")[0]);
 
     let fileNames = files.map(f => path.basename(f)).map(mapper);
     console.debug(files, fileNames);
@@ -41,12 +41,12 @@ export function requireFolder(folder: string, mapper?: (file: string) => string)
 }
 
 export enum LogLevel {
-    'critical',
-    'error',
-    'warning',
-    'info',
-    'verbose',
-    'debug'
+    "critical",
+    "error",
+    "warning",
+    "info",
+    "verbose",
+    "debug"
 }
 
 const oldLog = console.log;
@@ -57,13 +57,13 @@ function conditionalLog(level: LogLevel, prefix: string) {
     }
 }
 
-console.log = conditionalLog(NaN, '[Log]');
-console.critical = conditionalLog(LogLevel.critical, '[Critical]');
-console.error = conditionalLog(LogLevel.error, '[Error]');
-console.warning = conditionalLog(LogLevel.warning, '[Warning]');
-console.info = conditionalLog(LogLevel.info, '[Info]');
-console.verbose = conditionalLog(LogLevel.verbose, '[Verbose]');
-console.debug = conditionalLog(LogLevel.debug, '[Debug]');
+console.log = conditionalLog(NaN, "[Log]");
+console.critical = conditionalLog(LogLevel.critical, "[Critical]");
+console.error = conditionalLog(LogLevel.error, "[Error]");
+console.warning = conditionalLog(LogLevel.warning, "[Warning]");
+console.info = conditionalLog(LogLevel.info, "[Info]");
+console.verbose = conditionalLog(LogLevel.verbose, "[Verbose]");
+console.debug = conditionalLog(LogLevel.debug, "[Debug]");
 
 Number.prototype.between =
     function between(lower: number, upper: number, includeLower: boolean = true, includeUpper: boolean = false): boolean {
@@ -71,7 +71,7 @@ Number.prototype.between =
             (includeUpper ? this <= upper : this < upper);
     }
 
-String.prototype.reverse = function reverse() { return this.split('').reverse().join(''); }
+String.prototype.reverse = function reverse() { return this.split("").reverse().join(""); }
 String.prototype.similarity = function similarity(this: string, other: string) {
     let position = this.indexOf(other);
     if (position == -1) return 0;
