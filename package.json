@@ -1,6 +1,7 @@
 {
-	"name": "bbtag",
-	"description": "A BBTag syntax highligting extension",
+    "name": "bbtag",
+    "displayName": "BBTag",
+	"description": "A BBTag syntax highlighting extension",
 	"author": "Titansmasher",
 	"license": "MIT",
 	"version": "0.0.2",
