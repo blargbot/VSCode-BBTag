@@ -1,6 +1,6 @@
 {
-    "name": "bbtag",
-    "displayName": "BBTag",
+	"name": "bbtag",
+	"displayName": "BBTag",
 	"description": "A BBTag syntax highlighting extension",
 	"author": "Titansmasher",
 	"license": "MIT",
@@ -76,13 +76,13 @@
 		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
 	"devDependencies": {
-		"@types/node": "^6.0.101",
-		"typescript": "^2.7.2"
+		"@types/node": "^6.0.113",
+		"typescript": "^2.9.2"
 	},
 	"dependencies": {
-		"vscode-languageclient": "^4.0.0",
-		"vscode-languageserver": "^4.0.0",
-		"vscode": "^1.1.13",
-		"fuse.js": "^3.2.0"
+		"fuse.js": "^3.2.1",
+		"vscode": "^1.1.18",
+		"vscode-languageclient": "^4.2.1",
+		"vscode-languageserver": "^4.2.1"
 	}
 }
