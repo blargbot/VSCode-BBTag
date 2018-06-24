@@ -1,88 +1,88 @@
 {
-	"name": "bbtag",
-	"displayName": "BBTag",
-	"description": "A BBTag syntax highlighting extension",
-	"author": "Titansmasher",
-	"license": "MIT",
-	"version": "0.0.2",
-	"publisher": "Titansmasher",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Titansmasher/VSCode-BBTag"
-	},
-	"engines": {
-		"vscode": "^1.18.0",
-		"node": "*"
-	},
-	"categories": [
-		"Languages",
-		"Snippets"
-	],
-	"activationEvents": [
-		"onLanguage:bbtag"
-	],
-	"main": "./out/client/extension",
-	"contributes": {
-		"languages": [
-			{
-				"id": "bbtag",
-				"aliases": [
-					"BBTag"
-				],
-				"extensions": [
-					"bbtag"
-				],
-				"configuration": "./languages/bbtag.language-configuration.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "bbtag",
-				"scopeName": "source.bbtag",
-				"path": "./syntaxes/bbtag.tmLanguage.json"
-			}
-		],
-		"configuration": {
-			"type": "object",
-			"title": "BBTag Configuration",
-			"properties": {
-				"bbtag.logLevel": {
-					"scope": "resource",
-					"type": "number",
-					"default": 3,
-					"description": "Specifies the logging level. 0 = critical, 5 = debug"
-				},
-				"bbtag.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "off",
-					"description": "Traces the communication between VSCode and the language server."
-				}
-			}
-		}
-	},
-	"scripts": {
-		"compile": "tsc -p ./tsconfig.json",
-		"compile:client": "tsc -p ./tsconfig.json",
-		"watch:client": "tsc -w -p ./tsconfig.json",
-		"compile:server": "tsc -p ./tsconfig.json",
-		"watch:server": "tsc -w -p ./tsconfig.json",
-		"update-vscode": "node ./node_modules/vscode/bin/install",
-		"postinstall": "node ./node_modules/vscode/bin/install"
-	},
-	"devDependencies": {
-		"@types/node": "^6.0.113",
-		"typescript": "^2.9.2"
-	},
-	"dependencies": {
-		"fuse.js": "^3.2.1",
-		"vscode": "^1.1.18",
-		"vscode-languageclient": "^4.2.1",
-		"vscode-languageserver": "^4.2.1"
-	}
+    "name": "bbtag",
+    "displayName": "BBTag",
+    "description": "A BBTag syntax highlighting extension",
+    "author": "Titansmasher",
+    "license": "MIT",
+    "version": "0.0.2",
+    "publisher": "Titansmasher",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/blargbot/VSCode-BBTag"
+    },
+    "engines": {
+        "vscode": "^1.18.0",
+        "node": "*"
+    },
+    "categories": [
+        "Programming Languages",
+        "Snippets"
+    ],
+    "activationEvents": [
+        "onLanguage:bbtag"
+    ],
+    "main": "./out/client/extension",
+    "contributes": {
+        "languages": [
+            {
+                "id": "bbtag",
+                "aliases": [
+                    "BBTag"
+                ],
+                "extensions": [
+                    "bbtag"
+                ],
+                "configuration": "./languages/bbtag.language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "bbtag",
+                "scopeName": "source.bbtag",
+                "path": "./syntaxes/bbtag.tmLanguage.json"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "BBTag Configuration",
+            "properties": {
+                "bbtag.logLevel": {
+                    "scope": "resource",
+                    "type": "number",
+                    "default": 3,
+                    "description": "Specifies the logging level. 0 = critical, 5 = debug"
+                },
+                "bbtag.trace.server": {
+                    "scope": "window",
+                    "type": "string",
+                    "enum": [
+                        "off",
+                        "messages",
+                        "verbose"
+                    ],
+                    "default": "off",
+                    "description": "Traces the communication between VSCode and the language server."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "compile": "tsc -p ./tsconfig.json",
+        "compile:client": "tsc -p ./tsconfig.json",
+        "watch:client": "tsc -w -p ./tsconfig.json",
+        "compile:server": "tsc -p ./tsconfig.json",
+        "watch:server": "tsc -w -p ./tsconfig.json",
+        "update-vscode": "node ./node_modules/vscode/bin/install",
+        "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "devDependencies": {
+        "@types/node": "^6.0.113",
+        "typescript": "^2.9.2"
+    },
+    "dependencies": {
+        "fuse.js": "^3.2.1",
+        "vscode": "^1.1.18",
+        "vscode-languageclient": "^4.2.1",
+        "vscode-languageserver": "^4.2.1"
+    }
 }
