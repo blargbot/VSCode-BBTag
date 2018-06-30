@@ -2,10 +2,10 @@
     "name": "bbtag",
     "displayName": "BBTag",
     "description": "A BBTag syntax highlighting extension",
-    "author": "Titansmasher",
+    "author": "blargbot",
     "license": "MIT",
     "version": "0.0.3",
-    "publisher": "Titansmasher",
+    "publisher": "blargbot",
     "repository": {
         "type": "git",
         "url": "https://github.com/blargbot/VSCode-BBTag"
