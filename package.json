@@ -4,7 +4,7 @@
     "description": "A BBTag syntax highlighting extension",
     "author": "blargbot",
     "license": "MIT",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "publisher": "blargbot",
     "repository": {
         "type": "git",

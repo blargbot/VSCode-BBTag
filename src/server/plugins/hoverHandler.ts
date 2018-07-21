@@ -3,8 +3,8 @@ import { TextDocumentPositionParams, Hover, MarkupKind } from "vscode-languagese
 import { SubTag } from "../../common/structures/subtag";
 import { BBTag } from "../../common/structures/bbtag";
 
-function main(params: TextDocumentPositionParams): Hover {
-    let bbtag = server.cache.getDocument(params.textDocument).bbtag;
+async function main(params: TextDocumentPositionParams): Promise<Hover> {
+    let bbtag = await server.cache.getDocument(params.textDocument).bbtag;
     let curTag = bbtag.locate(params.position);
 
     if (curTag == null) return null;

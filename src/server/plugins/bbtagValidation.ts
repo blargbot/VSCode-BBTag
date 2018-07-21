@@ -4,15 +4,16 @@ import { SubTag } from "../../common/structures/subtag";
 import { IRange } from "../../common/structures/selection";
 import server from "../server";
 
-function main(document: TextDocument) {
-    let bbtag = server.cache.getDocument(document).bbtag;
+async function main(document: TextDocument) {
+    let bbtag = await server.cache.getDocument(document).bbtag;
     let context = new ValidationContext();
 
     parseMeta(bbtag.subTags[0], context);
     for (const subtag of bbtag.allSubTags) {
-        validate(subtag, context);
+        await validate(subtag, context);
     }
 
+    console.log('Sending Diagnostics. Errors: ', context.errors.length);
     server.connection.sendDiagnostics({ uri: document.uri, diagnostics: context.toDiagnostics() });
 }
 

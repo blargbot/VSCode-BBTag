@@ -30,7 +30,7 @@ export class Server {
         this.events.onChangeConfig.add(_ => console.log("Settings updated"));
 
         this.events.onDocumentUpdate.add(doc => self._events.onCache(this.cache.getDocument(doc), doc));
-        this.events.onUpdateCache.add(async (e, d) => e.bbtag = await BBTag.parseDocument(d));
+        this.events.onUpdateCache.add(async (e, d) => e.bbtag = BBTag.parseDocument(d));
 
         this._events.listen(this);
     }

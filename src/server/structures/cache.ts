@@ -34,8 +34,8 @@ export class CacheEntry {
         this._textDocuments = textDocuments;
     }
 
-    public get bbtag(): BBTag { return this.get<BBTag>("bbtag"); }
-    public set bbtag(value: BBTag) { this.set("bbtag", value); }
+    public get bbtag(): Promise<BBTag> { return this.get<Promise<BBTag>>("bbtag"); }
+    public set bbtag(value: Promise<BBTag>) { this.set("bbtag", value); }
     public get document(): TextDocument { return this._textDocuments.get(this.uri); }
 
     public get<T>(key: string): T {
