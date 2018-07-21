@@ -4,7 +4,7 @@
     "description": "A BBTag syntax highlighting extension",
     "author": "blargbot",
     "license": "MIT",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "publisher": "blargbot",
     "repository": {
         "type": "git",
@@ -79,10 +79,12 @@
     },
     "devDependencies": {
         "@types/node": "^6.0.113",
+        "@types/request": "^2.47.1",
         "typescript": "^2.9.2"
     },
     "dependencies": {
         "fuse.js": "^3.2.1",
+        "request": "^2.87.0",
         "vscode": "^1.1.18",
         "vscode-languageclient": "^4.3.0",
         "vscode-languageserver": "^4.3.0"

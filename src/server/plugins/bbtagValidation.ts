@@ -16,16 +16,18 @@ function main(document: TextDocument) {
     server.connection.sendDiagnostics({ uri: document.uri, diagnostics: context.toDiagnostics() });
 }
 
-function validate(subtag: SubTag, context: ValidationContext) {
+async function validate(subtag: SubTag, context: ValidationContext) {
     if (subtag == null || subtag.definition != null) return;
 
-    if (subtag.name == "*Dynamic"){
+    if (subtag.name == "*Dynamic") {
         context.warnings.push({
             range: subtag.range,
             message: "Dynamic subtag found. Validation cannot be performed (yet)"
         });
-    } else if (!subtag.parentSubTags.find(t => t.name == "//")){
-        let matches = SubTags.findClose(subtag.name);
+    } else if (subtag.name.startsWith('func.')) {
+
+    } else if (!subtag.parentSubTags.find(t => t.name == "//")) {
+        let matches = await SubTags.findClose(subtag.name);
         if (matches.length == 0)
             context.errors.push({
                 range: subtag.range,

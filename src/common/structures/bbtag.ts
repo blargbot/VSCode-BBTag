@@ -3,18 +3,18 @@ import { TextDocument } from "vscode-languageserver";
 import { CursorNavigator, CursorMap, Cursor } from "./cursorMap";
 import { DocumentTag } from "./docTag";
 
-export class BBTag extends DocumentTag{
-    public static parseDocument(document: TextDocument): BBTag {
+export class BBTag extends DocumentTag {
+    public static async parseDocument(document: TextDocument): Promise<BBTag> {
         console.verbose("=====================Parse Start=====================");
         let map = CursorMap.create(document);
-        let result = this.parse(map, map.makeNavigator());
+        let result = await this.parse(map, map.makeNavigator());
         console.verbose("=====================Parse Done =====================");
         console.verbose("Subtags found: ", result.subTagCount)
 
         return result;
     }
 
-    public static parse(parent: SubTag | CursorMap, navigator: CursorNavigator): BBTag {
+    public static async parse(parent: SubTag | CursorMap, navigator: CursorNavigator): Promise<BBTag> {
         let result = new BBTag(parent, navigator.current(), null);
         console.verbose("Start BBTag:", Cursor.toDebuggable(navigator.current()));
         nav:
@@ -22,7 +22,7 @@ export class BBTag extends DocumentTag{
             let current = navigator.current();
             switch (current.nextChar) {
                 case "{":
-                    result.addChild(SubTag.parse(result, navigator));
+                    result.addChild(await SubTag.parse(result, navigator));
                     navigator.moveBack();
                     break;
                 case ";":

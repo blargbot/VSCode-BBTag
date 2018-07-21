@@ -6,7 +6,7 @@ import SubTags, { SubTagDefinition } from "../data/subtagDefinition";
 
 
 export class SubTag extends DocumentTag {
-    public static parse(parent: BBTag, navigator: CursorNavigator): SubTag {
+    public static async parse(parent: BBTag, navigator: CursorNavigator): Promise<SubTag> {
         let result = new SubTag(parent, navigator.current(), null);
         console.verbose("Start SubTag:", Cursor.toDebuggable(navigator.current()));
 
@@ -14,7 +14,7 @@ export class SubTag extends DocumentTag {
             do {
                 if (navigator.current().nextChar.trim().length == 0)
                     continue;
-                result.addChild(BBTag.parse(result, navigator));
+                result.addChild(await BBTag.parse(result, navigator));
                 if (navigator.current().nextChar == "}" && navigator.moveNext()) {
                     result.setEnd(navigator.current());
                     break;
@@ -25,7 +25,7 @@ export class SubTag extends DocumentTag {
 
         result.trim();
 
-        result._definition = SubTags.findExact(result.name);
+        result._definition = await SubTags.findExact(result.name);
 
         console.verbose("End SubTag: ", Cursor.toDebuggable(result.end));
         return result;

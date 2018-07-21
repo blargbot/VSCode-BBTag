@@ -3,6 +3,7 @@ import { SubTag } from "../structures/subtag";
 import { BBTag } from "../structures/bbtag";
 import { IRange } from "../structures/selection";
 import * as Fuse from "fuse.js";
+import * as request from "request";
 
 export type DataType = "nothing" | "text" | "number" | "boolean" | "array" | "color" | "user" | "channel" | "role" | "guild" | number;
 export interface ValidationResult {
@@ -66,21 +67,50 @@ export interface Parameter {
 }
 
 export class SubTagDefinitionManager {
-    public readonly list: SubTagDefinition[] = [];
-    private readonly _fuse: Fuse = new Fuse(this.list, {
-        caseSensitive: false,
-        includeScore: true,
-        shouldSort: true,
-        keys: ["name"]
-    });
-
-    public findExact(name: string): SubTagDefinition {
-        name = name.toLowerCase();
-        return this.list.find(t => t.name == name);
+    public readonly list: Promise<SubTagDefinition[]>;
+    private readonly _fuse: Promise<Fuse>;
+    constructor() {
+        this.list = this.populate();
+        this._fuse = this.list.then(list => new Fuse(list, {
+            caseSensitive: false,
+            includeScore: true,
+            shouldSort: true,
+            keys: ["name"]
+        }));
     }
 
-    public findClose(name: string): SubTagDefinition[] {
-        let results = this._fuse.search<{ score: number, item: SubTagDefinition }>(name);
+    private async populate(): Promise<SubTagDefinition[]> {
+        let result: SubTagDefinition[] = [];
+
+        let subtags = extensions.requireFolder("./data/subtags");
+        for (const key of Object.keys(subtags)) {
+            let subtag = subtags[key];
+            result.push(subtag);
+        }
+
+        await new Promise((resolve, reject) => {
+            request("https://blargbot.xyz/tags/json", function (_error, response, body) {
+                if (response && response.statusCode.toString().startsWith("2")) {
+                    let dummies = JSON.parse(body as string);
+                    if (Array.isArray(dummies)) {
+                        loadDummies(result, dummies.map(d => d.name));
+                        return resolve();
+                    }
+                }
+                reject();
+            });
+        })
+
+        return result;
+    }
+
+    public async findExact(name: string): Promise<SubTagDefinition> {
+        name = name.toLowerCase();
+        return (await this.list).find(t => t.name == name);
+    }
+
+    public async findClose(name: string): Promise<SubTagDefinition[]> {
+        let results = (await this._fuse).search<{ score: number, item: SubTagDefinition }>(name);
         if (results.length == 0) return [];
 
         console.debug(results);
@@ -92,25 +122,16 @@ export class SubTagDefinitionManager {
 export const definitions = new SubTagDefinitionManager();
 export default definitions;
 
-let dummies = ["//", "abs", "apply", "args", "argsarray", "argslength", "ban", "base", "base64decode", "base64encode", "bool", "brainfuck", "capitalize", "channelid", "channelname", "channelpos", "choose", "clean", "color", "commandname", "commit", "concat", "decrement", "delete", "dm", "edit", "embed", "embedbuild", "emoji", "exec", "execcc", "fallback", "flag", "flagset", "for", "foreach", "function", "get", "guildcreatedat", "guildicon", "guildid", "guildmembers", "guildname", "guildownerid", "guildsize", "hash", "if", "increment", "indexof", "inject", "isarray", "iscc", "isnsfw", "isstaff", "join", "kick", "lang", "lb", "length", "lock", "logic", "lower", "math", "max", "messageattachments", "messageedittime", "messageembeds", "messageid", "messagesender", "messagetext", "messagetime", "min", "modlog", "newline", "nsfw", "output", "pad", "pardon", "parsefloat", "parseint", "pop", "prefix", "push", "quiet", "randchoose", "randint", "randstr", "randuser", "rb", "reactadd", "reactlist", "reactremove", "realpad", "regexmatch", "regexreplace", "regexsplit", "regextest", "repeat", "replace", "return", "reverse", "roleadd", "rolecolor", "rolecreate", "roledelete", "roleid", "rolemembers", "rolemention", "rolename", "roleremove", "roles", "rolesetmentionable", "rolesize", "rollback", "round", "rounddown", "roundup", "semi", "send", "set", "shift", "shuffle", "sleep", "slice", "sort", "space", "splice", "split", "substring", "subtagexists", "suppresslookup", "switch", "throw", "time", "timer", "trim", "unban", "upper", "uriencode", "useravatar", "usercreatedat", "userdiscrim", "usergame", "usergametype", "userhasrole", "userid", "userisbot", "userjoinedat", "usermention", "username", "usernick", "usersetnick", "userstatus", "usertimezone", "void", "waitmessage", "waitreaction", "warn", "warnings", "webhook", "while", "zws", "absolute", "addreact", "addrole", "atob", "attachments", "btoa", "buildembed", "ceil", "colour", "floor", "func", "hasrole", "inguild", "inrole", "ismod", "listreact", "loop", "match", "radix", "removereact", "removerole", "sender", "setnick", "text", "timestamp", "userbot", "waitreact"]
-
-let subtags = extensions.requireFolder("./data/subtags");
-for (const key of Object.keys(subtags)) {
-    let subtag = subtags[key];
-    let index = dummies.indexOf(subtag.name);
-    definitions.list.push(subtag);
-
-    if (index != -1)
-        dummies.splice(index, 1);
+function loadDummies(list: SubTagDefinition[], names: string[]) {
+    for (const name of names) {
+        list.push({
+            name,
+            category: "dummy" as any,
+            title: "A dummy tag",
+            description: "A dummy tag, loaded automatically",
+            parameters: [],
+            returns: "text"
+        });
+    }
 }
 
-for (const dummy of dummies) {
-    definitions.list.push({
-        name: dummy,
-        category: "dummy" as any,
-        title: "A dummy tag",
-        description: "A dummy tag, loaded automatically",
-        parameters: [],
-        returns: "text"
-    })
-}

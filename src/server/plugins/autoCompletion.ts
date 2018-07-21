@@ -2,8 +2,8 @@ import { CompletionItem, TextDocumentPositionParams, CompletionItemKind, InsertT
 import SubTagDefinitions from "../../common/data/subtagDefinition";
 import server from "../server";
 
-function onCompletion(_docPos: TextDocumentPositionParams): CompletionItem[] {
-    return SubTagDefinitions.list.map((d, i) => {
+async function onCompletion(_docPos: TextDocumentPositionParams): Promise<CompletionItem[]> {
+    return (await SubTagDefinitions.list).map((d, i) => {
         return <CompletionItem>{
             label: d.name,
             filterText: "{" + d.name,
