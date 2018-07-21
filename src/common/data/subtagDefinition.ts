@@ -93,7 +93,9 @@ export class SubTagDefinitionManager {
                 if (response && response.statusCode.toString().startsWith("2")) {
                     let dummies = JSON.parse(body as string);
                     if (Array.isArray(dummies)) {
-                        loadDummies(result, dummies.map(d => d.name));
+                        let names = dummies.map(d => [d.name, ...(d.aliases || [])])
+                            .reduce((acc, cur) => (acc.push(cur), acc), []);
+                        loadDummies(result, names);
                         return resolve();
                     }
                 }
