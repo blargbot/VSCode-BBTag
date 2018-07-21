@@ -11,7 +11,7 @@
         "url": "https://github.com/blargbot/VSCode-BBTag"
     },
     "engines": {
-        "vscode": "^1.18.0",
+        "vscode": "^1.22.0",
         "node": "*"
     },
     "categories": [
@@ -67,13 +67,17 @@
         }
     },
     "scripts": {
+        "build": "npm run compile",
         "compile": "tsc -p ./tsconfig.json",
         "compile:client": "tsc -p ./tsconfig.json",
         "watch:client": "tsc -w -p ./tsconfig.json",
         "compile:server": "tsc -p ./tsconfig.json",
         "watch:server": "tsc -w -p ./tsconfig.json",
         "update-vscode": "node ./node_modules/vscode/bin/install",
-        "postinstall": "node ./node_modules/vscode/bin/install"
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "patch": "vsce publish patch",
+        "minor": "vsce publish minor",
+        "major": "vsce publish major"
     },
     "devDependencies": {
         "@types/node": "^6.0.113",
@@ -82,7 +86,7 @@
     "dependencies": {
         "fuse.js": "^3.2.1",
         "vscode": "^1.1.18",
-        "vscode-languageclient": "^4.2.1",
-        "vscode-languageserver": "^4.2.1"
+        "vscode-languageclient": "^4.3.0",
+        "vscode-languageserver": "^4.3.0"
     }
 }
