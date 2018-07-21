@@ -75,9 +75,7 @@
         "watch:server": "tsc -w -p ./tsconfig.json",
         "update-vscode": "node ./node_modules/vscode/bin/install",
         "postinstall": "node ./node_modules/vscode/bin/install",
-        "patch": "vsce publish patch",
-        "minor": "vsce publish minor",
-        "major": "vsce publish major"
+        "package": "vsce package"
     },
     "devDependencies": {
         "@types/node": "^6.0.113",
