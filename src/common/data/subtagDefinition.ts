@@ -93,8 +93,8 @@ export class SubTagDefinitionManager {
                 if (response && response.statusCode.toString().startsWith("2")) {
                     let dummies = JSON.parse(body as string);
                     if (Array.isArray(dummies)) {
-                        let names = dummies.map(d => [d.name, ...(d.aliases || [])])
-                            .reduce((acc, cur) => (acc.push(cur), acc), []);
+                        let names = dummies.map(d => [d.name, ...(d.aliases || [])] as string[])
+                            .reduce((acc, cur) => (acc.push(...cur), acc), []);
                         loadDummies(result, names);
                         return resolve();
                     }
@@ -115,7 +115,6 @@ export class SubTagDefinitionManager {
         let results = (await this._fuse).search<{ score: number, item: SubTagDefinition }>(name);
         if (results.length == 0) return [];
 
-        console.debug(results);
         if (results[0].score == 0) return [results[0].item];
         return results.filter(r => r.score < 0.1).slice(0, 5).map(r => r.item);
     }
