@@ -95,7 +95,7 @@ export class SubTagDefinitionManager {
                     if (Array.isArray(dummies)) {
                         let names = dummies.map(d => [d.name, ...(d.aliases || [])] as string[])
                             .reduce((acc, cur) => (acc.push(...cur), acc), []);
-                        loadDummies(result, names);
+                        loadDummies(result, ...names, 'reaction', 'params', 'paramslength', 'paramsarray');
                         return resolve();
                     }
                 }
@@ -123,7 +123,7 @@ export class SubTagDefinitionManager {
 export const definitions = new SubTagDefinitionManager();
 export default definitions;
 
-function loadDummies(list: SubTagDefinition[], names: string[]) {
+function loadDummies(list: SubTagDefinition[], ...names: string[]) {
     for (const name of names) {
         list.push({
             name,
