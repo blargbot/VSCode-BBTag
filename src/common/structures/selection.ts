@@ -40,7 +40,7 @@ export class Range implements IRange {
 
         if (rStart == null || rEnd == null || tStart == null || tEnd == null) return "none";
 
-        if (tStart.lt(rStart)) {
+        if (tStart.le(rStart)) {
             if (tEnd.le(rStart))
                 return "below";
             if (tEnd.lt(rEnd))
@@ -48,7 +48,7 @@ export class Range implements IRange {
             return "full";
         }
 
-        if (tEnd.gt(rEnd)) {
+        if (tEnd.ge(rEnd)) {
             if (tStart.ge(rEnd))
                 return "above";
             if (tEnd.gt(rStart))

@@ -7,8 +7,11 @@ async function main(params: TextDocumentPositionParams): Promise<Hover> {
     let bbtag = await server.cache.getDocument(params.textDocument).bbtag;
     let curTag = bbtag.locate(params.position);
 
-    if (curTag == null) return null;
-    if (curTag instanceof BBTag && curTag.parent.params[0] == curTag) curTag = curTag.parent;
+    if (curTag == null)
+        return null;
+
+    if (curTag instanceof BBTag && curTag.parent)
+        curTag = curTag.parent;
 
     if (curTag instanceof SubTag)
         return {
