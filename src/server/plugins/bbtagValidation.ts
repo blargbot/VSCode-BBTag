@@ -26,8 +26,12 @@ async function validate(subtag: SubTag, context: ValidationContext) {
             message: "Dynamic subtag found. Validation cannot be performed (yet)"
         });
     } else if (subtag.name.startsWith('func.')) {
-
-    } else if (!subtag.parentSubTags.find(t => t.name == "//")) {
+        // Do nothing
+    } else if (subtag.parentSubTags.find(t => t.name == "//")) {
+        // Do nothing
+    } else if (subtag.parentSubTags.find(t => t.name == "j" || t.name == "json")) {
+        // Do nothing
+    } else {
         let matches = await SubTags.findClose(subtag.name);
         if (matches.length == 0)
             context.errors.push({
