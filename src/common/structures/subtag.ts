@@ -1,20 +1,20 @@
-import { BBTag } from "./bbtag"
+import { BBString } from "./bbtag"
 import { CursorNavigator, Cursor } from "./cursorMap";
 import { DocumentTag } from "./docTag";
 import { IRange, Range, Position } from "./selection";
 import SubTags, { SubTagDefinition } from "../data/subtagDefinition";
 
 
-export class SubTag extends DocumentTag {
-    public static async parse(parent: BBTag, navigator: CursorNavigator): Promise<SubTag> {
-        let result = new SubTag(parent, navigator.current(), null);
+export class BBSubTag extends DocumentTag {
+    public static async parse(parent: BBString, navigator: CursorNavigator): Promise<BBSubTag> {
+        let result = new BBSubTag(parent, navigator.current(), null);
         console.verbose("Start SubTag:", Cursor.toDebuggable(navigator.current()));
 
         if (navigator.moveNext()) {
             do {
                 if (navigator.current().nextChar.trim().length == 0)
                     continue;
-                result.addChild(await BBTag.parse(result, navigator));
+                result.addChild(await BBString.parse(result, navigator));
                 if (navigator.current().nextChar == "}" && navigator.moveNext()) {
                     result.setEnd(navigator.current());
                     break;
@@ -34,17 +34,17 @@ export class SubTag extends DocumentTag {
     private _definition: SubTagDefinition;
 
     public get definition(): SubTagDefinition { return this._definition; }
-    public get params(): BBTag[] { return this.children.map(c => <BBTag>c); }
-    public get parent(): BBTag { return <BBTag>super.parent }
-    public get subTagCount(): number { return this.descendants.filter(d => d instanceof SubTag).length; }
+    public get params(): BBString[] { return this.children.map(c => <BBString>c); }
+    public get parent(): BBString { return <BBString>super.parent }
+    public get subTagCount(): number { return this.descendants.filter(d => d instanceof BBSubTag).length; }
     public get isMalformed(): boolean { return this.params.reduce((p, b) => p || b.isMalformed, false) || this.end.prevChar != "}" || this.start.nextChar != "{"; }
 
     public get name(): "*Dynamic" | string { return this.params[0].subTags.length == 0 ? this.params[0].content.toLowerCase() : "*Dynamic"; }
     public get nameRange(): IRange { return this.params[0].range; }
 
-    public get parentSubTags(): SubTag[] { return this.ancestors.filter(a => a instanceof SubTag) as SubTag[]; }
+    public get parentSubTags(): BBSubTag[] { return this.ancestors.filter(a => a instanceof BBSubTag) as BBSubTag[]; }
 
-    private constructor(parent: BBTag, start: Cursor, end: Cursor) {
+    private constructor(parent: BBString, start: Cursor, end: Cursor) {
         super(parent, start, end);
     }
 
@@ -56,7 +56,7 @@ export class SubTag extends DocumentTag {
 
         console.verbose("Initial", result);
 
-        for (const child of [].concat.apply([], this.params.map(p => p.subTags)) as SubTag[]) {
+        for (const child of [].concat.apply([], this.params.map(p => p.subTags)) as BBSubTag[]) {
             for (const range of result.slice(0)) {
                 if (Range.getIntersection(range, child.range) == "contains") {
                     let add: IRange = { start: child.range.end, end: range.end };

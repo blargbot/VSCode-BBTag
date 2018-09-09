@@ -1,6 +1,6 @@
 import SubTags, { DataType } from "../../common/data/subtagDefinition"
 import { TextDocument, DiagnosticSeverity, Diagnostic } from "vscode-languageserver/lib/main";
-import { SubTag } from "../../common/structures/subtag";
+import { BBSubTag } from "../../common/structures/subtag";
 import { IRange } from "../../common/structures/selection";
 import server from "../server";
 
@@ -17,19 +17,19 @@ async function main(document: TextDocument) {
     server.connection.sendDiagnostics({ uri: document.uri, diagnostics: context.toDiagnostics() });
 }
 
-async function validate(subtag: SubTag, context: ValidationContext) {
+async function validate(subtag: BBSubTag, context: ValidationContext) {
     if (subtag == null || subtag.definition != null) return;
 
-    if (subtag.name == "*Dynamic") {
+    if (subtag.parentSubTags.find(t => t.name == "//")) {
+        // Do nothing
+    } else if (subtag.parentSubTags.find(t => t.name == "j" || t.name == "json")) {
+        // Do nothing
+    } else if (subtag.name == "*Dynamic") {
         context.warnings.push({
             range: subtag.range,
             message: "Dynamic subtag found. Validation cannot be performed (yet)"
         });
     } else if (subtag.name.startsWith('func.')) {
-        // Do nothing
-    } else if (subtag.parentSubTags.find(t => t.name == "//")) {
-        // Do nothing
-    } else if (subtag.parentSubTags.find(t => t.name == "j" || t.name == "json")) {
         // Do nothing
     } else {
         let matches = await SubTags.findClose(subtag.name);
@@ -46,7 +46,7 @@ async function validate(subtag: SubTag, context: ValidationContext) {
     }
 }
 
-function parseMeta(subtag: SubTag, context: ValidationContext) {
+function parseMeta(subtag: BBSubTag, context: ValidationContext) {
     if (subtag == null) return;
     if (subtag.name != "//") return;
     if (subtag.params[1].content != "<META>") return;

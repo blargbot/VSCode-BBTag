@@ -1,6 +1,6 @@
 import * as extensions from "../extensions";
-import { SubTag } from "../structures/subtag";
-import { BBTag } from "../structures/bbtag";
+import { BBSubTag } from "../structures/subtag";
+import { BBString } from "../structures/bbtag";
 import { IRange } from "../structures/selection";
 import * as Fuse from "fuse.js";
 import * as request from "request";
@@ -27,7 +27,7 @@ export interface SubTagDefinition {
     readonly parameters: (Parameter | ParameterGroup)[];
 
     /** An optional method to validate the SubTag as a whole. */
-    readonly validate?: (subtag: SubTag) => true | ValidationResult | ValidationResult[];
+    readonly validate?: (subtag: BBSubTag) => true | ValidationResult | ValidationResult[];
 
     //[key: string]: any;
 }
@@ -38,10 +38,10 @@ export interface ParameterGroup {
     /** A list of all parameters or groups within this group. */
     readonly children: (Parameter | ParameterGroup)[];
     /** Is the group required? Defaults to `false` */
-    readonly required?: boolean | number | ((bbtag: BBTag) => boolean);
+    readonly required?: boolean | number | ((bbtag: BBString) => boolean);
 
     /** An optional method to validate all contained parameters. */
-    readonly validate?: (bbtag: BBTag[]) => true | ValidationResult | ValidationResult[];
+    readonly validate?: (bbtag: BBString[]) => true | ValidationResult | ValidationResult[];
 
     //[key: string]: any;
 }
@@ -52,16 +52,16 @@ export interface Parameter {
     /** The data type(s) that the parameter accepts. */
     readonly accepts: DataType | DataType[];
     /** Specifies a limited range of values the parameter can accept. */
-    readonly restricted?: string[] | ((bbtag: BBTag) => string[]) | [number, number];
+    readonly restricted?: string[] | ((bbtag: BBString) => string[]) | [number, number];
     /** Is the parameter required? Defaults to `false`. */
-    readonly required?: boolean | number | ((bbtag: BBTag) => boolean);
+    readonly required?: boolean | number | ((bbtag: BBString) => boolean);
     /** Can the parameter accept multiple values. If `true`, any excess values provided will be taken by this parameter. */
     readonly extended?: boolean;
     /** Specifies the level of support for arrays. */
     readonly array?: "ignored" | "optional" | "required";
 
     /** An optional method to validate this parameter. */
-    readonly validate?: (bbtag: BBTag) => true | ValidationResult | ValidationResult[];
+    readonly validate?: (bbtag: BBString) => true | ValidationResult | ValidationResult[];
 
     //[key: string]: any;
 }

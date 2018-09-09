@@ -1,10 +1,10 @@
-import { SubTag } from "./subtag"
+import { BBSubTag } from "./subtag"
 import { TextDocument } from "vscode-languageserver";
 import { CursorNavigator, CursorMap, Cursor } from "./cursorMap";
 import { DocumentTag } from "./docTag";
 
-export class BBTag extends DocumentTag {
-    public static async parseDocument(document: TextDocument): Promise<BBTag> {
+export class BBString extends DocumentTag {
+    public static async parseDocument(document: TextDocument): Promise<BBString> {
         console.verbose("=====================Parse Start=====================");
         let map = CursorMap.create(document);
         let result = await this.parse(map, map.makeNavigator());
@@ -14,15 +14,15 @@ export class BBTag extends DocumentTag {
         return result;
     }
 
-    public static async parse(parent: SubTag | CursorMap, navigator: CursorNavigator): Promise<BBTag> {
-        let result = new BBTag(parent, navigator.current(), null);
+    public static async parse(parent: BBSubTag | CursorMap, navigator: CursorNavigator): Promise<BBString> {
+        let result = new BBString(parent, navigator.current(), null);
         console.verbose("Start BBTag:", Cursor.toDebuggable(navigator.current()));
         nav:
         do {
             let current = navigator.current();
             switch (current.nextChar) {
                 case "{":
-                    result.addChild(await SubTag.parse(result, navigator));
+                    result.addChild(await BBSubTag.parse(result, navigator));
                     navigator.moveBack();
                     break;
                 case ";":
@@ -41,13 +41,13 @@ export class BBTag extends DocumentTag {
         return result;
     }
 
-    public get subTags(): SubTag[] { return this.children.map(d => <SubTag>d); }
-    public get parent(): SubTag { return <SubTag>super.parent }
-    public get allSubTags(): SubTag[] { return this.descendants.filter(d => d instanceof SubTag) as SubTag[]; }
+    public get subTags(): BBSubTag[] { return this.children.map(d => <BBSubTag>d); }
+    public get parent(): BBSubTag { return <BBSubTag>super.parent }
+    public get allSubTags(): BBSubTag[] { return this.descendants.filter(d => d instanceof BBSubTag) as BBSubTag[]; }
     public get subTagCount(): number { return this.allSubTags.length; }
     public get isMalformed(): boolean { return this.subTags.reduce((p, s) => p || s.isMalformed, false); }
 
-    private constructor(parent: SubTag | CursorMap, start: Cursor, end: Cursor) {
+    private constructor(parent: BBSubTag | CursorMap, start: Cursor, end: Cursor) {
         super(parent, start, end);
     }
 }

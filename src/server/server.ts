@@ -5,7 +5,7 @@ import {
     createConnection,
     TextDocuments
 } from "vscode-languageserver";
-import { BBTag } from "../common/structures/bbtag";
+import { BBString } from "../common/structures/bbtag";
 import { Cache } from "./structures/cache";
 import { BBTagConfig } from "./structures/config";
 import { ServerEventManager, ServerEvents } from "./structures/eventManager";
@@ -30,7 +30,7 @@ export class Server {
         this.events.onChangeConfig.add(_ => console.log("Settings updated"));
 
         this.events.onDocumentUpdate.add(doc => self._events.onCache(this.cache.getDocument(doc), doc));
-        this.events.onUpdateCache.add(async (e, d) => e.bbtag = BBTag.parseDocument(d));
+        this.events.onUpdateCache.add(async (e, d) => e.bbtag = BBString.parseDocument(d));
 
         this._events.listen(this);
     }

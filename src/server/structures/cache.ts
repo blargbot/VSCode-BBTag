@@ -1,4 +1,4 @@
-import { BBTag } from "../../common/structures/bbtag";
+import { BBString } from "../../common/structures/bbtag";
 import { TextDocument, TextDocuments, TextDocumentIdentifier } from "vscode-languageserver";
 
 export class Cache {
@@ -34,8 +34,8 @@ export class CacheEntry {
         this._textDocuments = textDocuments;
     }
 
-    public get bbtag(): Promise<BBTag> { return this.get<Promise<BBTag>>("bbtag"); }
-    public set bbtag(value: Promise<BBTag>) { this.set("bbtag", value); }
+    public get bbtag(): Promise<BBString> { return this.get<Promise<BBString>>("bbtag"); }
+    public set bbtag(value: Promise<BBString>) { this.set("bbtag", value); }
     public get document(): TextDocument { return this._textDocuments.get(this.uri); }
 
     public get<T>(key: string): T {
