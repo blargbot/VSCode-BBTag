@@ -1,8 +1,5 @@
 import { SubtagDetails } from './SubtagDetails';
-import * as _Fuse from 'fuse.js';
-
-type Fuse<T> = _Fuse.default<T>;
-const Fuse = _Fuse as unknown as typeof _Fuse.default;
+import Fuse from 'fuse.js';
 
 export class SubtagDetailsLookup {
 	readonly #fuzzy: Fuse<SubtagDetails>;

@@ -1,17 +1,23 @@
 import { createConnection, ProposedFeatures } from 'vscode-languageserver/node';
 import { Server } from './server';
-import * as fs from 'fs';
-import path = require('path');
 
 const connection = createConnection(ProposedFeatures.all);
 export const server = new Server(connection);
-for (const file of fs.readdirSync(path.join(__dirname, 'plugins'))) {
-	if (path.extname(file) !== '.js')
-		continue;
-
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	const module = require(path.join(__dirname, 'plugins', file));
-	if (typeof module === 'object' && module !== null && typeof module['init'] === 'function')
-		module.init(server);
+function* loadAll<T>(require: __WebpackModuleApi.RequireContext, filter: (module: unknown) => module is T): Generator<T> {
+	for (const name of require.keys()) {
+		const module = require(name);
+		if (filter(module))
+			yield module;
+	}
 }
+
+function isPlugin(module: unknown): module is { init(server: Server): void } {
+	return typeof module === 'object'
+		&& module !== null
+		&& typeof (module as Record<PropertyKey, unknown>)['init'] === 'function';
+}
+
+for (const plugin of loadAll(require.context('./plugins/', true, /\.ts$/), isPlugin))
+	plugin.init(server);
+
 connection.listen();
