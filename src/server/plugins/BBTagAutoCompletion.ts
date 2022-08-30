@@ -3,7 +3,7 @@ import { BBString } from '../bbtag/BBString';
 import { BBSubtag } from '../bbtag/BBSubtag';
 import { SubtagDetails, SubtagSignature } from '../bbtag/SubtagDetails';
 import { SubtagDetailsLookup } from '../bbtag/SubtagDetailsLookup';
-import { Server } from '../server';
+import { Server } from '../Server';
 import { positionComparer, raceCancellation } from '../utils';
 
 type SignatureCompletionItemFactory = (context: { definition: SubtagDetails, signature: SubtagSignature, name: string, pattern: string[], insertText: string }) => Partial<CompletionItem>;

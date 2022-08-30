@@ -1,8 +1,8 @@
 import { createConnection, ProposedFeatures } from 'vscode-languageserver/node';
-import { Server } from './server';
+import { Server } from './Server';
 
 const connection = createConnection(ProposedFeatures.all);
-export const server = new Server(connection);
+const server = new Server(connection);
 function* loadAll<T>(require: __WebpackModuleApi.RequireContext, filter: (module: unknown) => module is T): Generator<T> {
 	for (const name of require.keys()) {
 		const module = require(name);

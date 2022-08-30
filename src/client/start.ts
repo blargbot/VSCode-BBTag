@@ -8,7 +8,7 @@ let client: LanguageClient | undefined;
 export function activate(context: ExtensionContext) {
 	// The server is implemented in node
 	const serverModule = context.asAbsolutePath(
-		path.join('server', 'out', 'start.js')
+		path.join('out', 'server.js')
 	);
 
 	// If the extension is launched in debug mode then the debug server options are used

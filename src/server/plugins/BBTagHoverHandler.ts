@@ -3,7 +3,7 @@ import { BBString } from '../bbtag/BBString';
 import { BBSubtag } from '../bbtag/BBSubtag';
 import { stringifySignature } from '../bbtag/stringifyDetails';
 import { SubtagDetails, SubtagSignature, SubtagSignatureParameter } from '../bbtag/SubtagDetails';
-import { Server } from '../server';
+import { Server } from '../Server';
 import { raceCancellation, positionComparer } from '../utils';
 
 export class BBTagHoverHandler {

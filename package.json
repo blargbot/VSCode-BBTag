@@ -24,7 +24,7 @@
 	"activationEvents": [
 		"onLanguage:bbtag"
 	],
-	"main": "./client/out/extension",
+	"main": "./out/client",
 	"contributes": {
 		"languages": [
 			{
@@ -71,26 +71,27 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile:prod",
-		"compile:prod": "npm run clean && npm run compile:prod:client && npm run compile:prod:server",
-		"compile:prod:client": "webpack --mode production --config ./client/webpack.config.js",
-		"compile:prod:server": "webpack --mode production --config ./server/webpack.config.js",
-		"compile": "npm run clean && npm run compile:client && npm run compile:server",
-		"compile:client": "webpack --mode none --config ./client/webpack.config.js",
-		"compile:server": "webpack --mode none --config ./server/webpack.config.js",
-		"watch:client": "webpack --mode none --config ./client/webpack.config.js --watch",
-		"watch:server": "webpack --mode none --config ./server/webpack.config.js --watch",
-		"test": "cd client && npm test && cd ..",
-		"clean": "rimraf client/out && rimraf server/out",
-		"postinstall": "cd client && npm install && cd ../server && npm install && cd .."
+		"compile:prod": "npm run clean && webpack --mode production",
+		"compile": "webpack",
+		"watch": "webpack --watch",
+		"clean": "rimraf out"
+	},
+	"dependencies": {
+		"fuse.js": "^6.6.2",
+		"node-fetch": "^2.6.7",
+		"vscode-languageclient": "^7.0.0",
+		"vscode-languageserver": "^7.0.0",
+		"vscode-languageserver-textdocument": "^1.0.4"
 	},
 	"devDependencies": {
-		"@types/mocha": "^9.1.0",
 		"@types/node": "^16.11.7",
+		"@types/node-fetch": "^2.6.2",
+		"@types/glob": "^7.2.0",
+		"@types/vscode": "^1.63.0",
+		"@types/webpack-env": "^1.18.0",
 		"@typescript-eslint/eslint-plugin": "^5.30.0",
 		"@typescript-eslint/parser": "^5.30.0",
 		"eslint": "^8.13.0",
-		"merge-options": "^3.0.4",
-		"mocha": "^9.2.1",
 		"rimraf": "^3.0.2",
 		"ts-loader": "^9.3.1",
 		"typescript": "^4.7.2",

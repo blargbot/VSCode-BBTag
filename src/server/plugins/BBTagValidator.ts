@@ -1,9 +1,8 @@
 import { Diagnostic, DiagnosticSeverity } from 'vscode-languageserver';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { BBString } from '../bbtag/BBString';
-import { Server } from '../server';
+import { Server } from '../Server';
 import { SubtagDetailsLookup } from '../bbtag/SubtagDetailsLookup';
-import { server } from '../start';
 import { BBSubtag } from '../bbtag/BBSubtag';
 
 export class BBTagValidator {
@@ -18,7 +17,7 @@ export class BBTagValidator {
 
 	public async validateAll(): Promise<void> {
 		await Promise.all(
-			server.documents.all().map(doc => this.validate(doc))
+			this.#server.documents.all().map(doc => this.validate(doc))
 		);
 	}
 
@@ -31,13 +30,13 @@ export class BBTagValidator {
 	}
 
 	public async * getDiagnostics(document: TextDocument): AsyncIterable<Diagnostic> {
-		const subtagsPromise = server.getSubtags();
-		const config = await server.getConfiguration(document.uri);
+		const subtagsPromise = this.#server.getSubtags();
+		const config = await this.#server.getConfiguration(document.uri);
 		if (config.maxNumberOfProblems === 0)
 			return;
 
 		const subtags = await subtagsPromise;
-		const bbtag = server.getBBTag(document.uri);
+		const bbtag = this.#server.getBBTag(document.uri);
 		let count = 0;
 		for await (const diagnostic of this.#getStringDiagnostics(bbtag, subtags)) {
 			yield diagnostic;
